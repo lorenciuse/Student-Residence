@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    
+    <!--<context:component-scan base-package="com.sr"></context:component-scan>-->
+    
+    <!-- Initialization for data source -->
+    <bean id="oracleDataSource" 
+          class="oracle.jdbc.pool.OracleDataSource" 
+          destroy-method="close">
+        <property name="uRL" value="${url}"></property>
+        <property name="user" value="${username}"></property>
+        <property name="password" value="${password}"></property>
+        <property name="connectionCachingEnabled" value="true"></property>
+        <property name="connectionProperties">
+            <props merge="default">
+                <prop key="AutoCommit">false</prop>
+            </props>
+        </property>
+        <property name="connectionCacheProperties">
+            <props>
+                <prop key="MinLimit">5</prop>
+                <prop key="MaxLimit">10</prop>
+                <prop key="InactivityTimeout">2</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="propertyConfigurer" 
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="resources/jdbc.properties"></property>
+    </bean>
+        
+<!--    <bean id="jdbcTemplate"
+          class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="oracleDataSource" ref="oracleDataSource"></property>
+    </bean>-->
+    
+    <!--<context:property-placeholder location="jdbc.properties"/>-->
+    <!-- Definition for monitoringJDBCTemplate bean -->
+<!--    <bean id="databaseConnection" 
+              class="com.sr.model.connection.DatabaseConnection">
+        <property name="oracleDataSource"  ref="oracleDataSource" />    
+    </bean>-->
+</beans>
