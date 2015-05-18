@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sr.model.mahasiswa;
+package com.sr.model.dao;
 
 import java.util.List;
 import org.springframework.stereotype.Repository;

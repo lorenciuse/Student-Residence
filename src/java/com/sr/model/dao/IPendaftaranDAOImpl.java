@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sr.model.pendaftaran;
+package com.sr.model.dao;
 
-import com.sr.model.akademik.AkademikSR;
-import com.sr.model.akademik.Prestasi;
-import com.sr.model.mahasiswa.Mahasiswa;
+import com.sr.model.AkademikSR;
+import com.sr.model.Prestasi;
+import com.sr.model.Mahasiswa;
+import com.sr.model.Pendaftaran;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Blob;

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sr.model.pamong;
+package com.sr.model.dao;
 
+import com.sr.model.Pamong;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,4 +18,5 @@ public interface IPamongDAO<T> {
     public int validateLogin(String pUsername, String pPassword);
     public String findPamongNameById(String idPamong);
     public Pamong findByPamongId(String idPamong);
+    public String getLocation(String idPamong);
 }

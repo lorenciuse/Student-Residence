@@ -5,12 +5,12 @@
  */
 package com.sr.controller;
 
-import com.sr.model.mahasiswa.IMahasiswaDAO;
-import com.sr.model.mahasiswa.Mahasiswa;
+import com.sr.model.dao.IMahasiswaDAO;
+import com.sr.model.Mahasiswa;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.sr.model.pamong.IPamongDAO;
-import com.sr.model.pamong.Pamong;
+import com.sr.model.dao.IPamongDAO;
+import com.sr.model.Pamong;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;

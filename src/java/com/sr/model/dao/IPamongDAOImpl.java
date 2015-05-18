@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sr.model.pamong;
+package com.sr.model.dao;
 
+import com.sr.model.Pamong;
 import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ import org.springframework.jdbc.core.RowMapper;
 public class IPamongDAOImpl implements IPamongDAO<Pamong> {
     private final String FIND_PAMONG_NAME_BY_ID = "SELECT NAMA_PAMONG FROM PAMONG WHERE ID_PAMONG = ?";
     private final String FIND_BY_PAMONG_ID = "SELECT * FROM LOGIN WHERE ID_PAMONG = ?";
+    private final String GET_LOCATION = "SELECT LOKASI FROM PAMONG WHERE ID_PAMONG = ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -49,6 +51,13 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
         String name = (String) getJdbcTemplate().queryForObject(
                 FIND_PAMONG_NAME_BY_ID, new Object[]{idPamong}, String.class);
         return name;
+    }
+
+    @Override
+    public String getLocation(String idPamong) {
+        String lokasi = (String) getJdbcTemplate().queryForObject(
+                GET_LOCATION, new Object[]{idPamong}, String.class);
+        return lokasi;
     }
 
     public class PamongRowMapper implements RowMapper {

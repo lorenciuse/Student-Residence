@@ -6,9 +6,7 @@
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
        http://www.springframework.org/schema/context 
        http://www.springframework.org/schema/context/spring-context-4.0.xsd">
-    
-    <!--<context:component-scan base-package="com.sr"></context:component-scan>-->
-    
+        
     <!-- Initialization for data source -->
     <bean id="oracleDataSource" 
           class="oracle.jdbc.pool.OracleDataSource" 
@@ -35,16 +33,4 @@
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="resources/jdbc.properties"></property>
     </bean>
-        
-<!--    <bean id="jdbcTemplate"
-          class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="oracleDataSource" ref="oracleDataSource"></property>
-    </bean>-->
-    
-    <!--<context:property-placeholder location="jdbc.properties"/>-->
-    <!-- Definition for monitoringJDBCTemplate bean -->
-<!--    <bean id="databaseConnection" 
-              class="com.sr.model.connection.DatabaseConnection">
-        <property name="oracleDataSource"  ref="oracleDataSource" />    
-    </bean>-->
 </beans>

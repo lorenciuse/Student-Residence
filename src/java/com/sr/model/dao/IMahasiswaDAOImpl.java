@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sr.model.mahasiswa;
+package com.sr.model.dao;
 
-import com.sr.model.pendaftaran.IPendaftaranDAO;
-import com.sr.model.pendaftaran.Pendaftaran;
+import com.sr.model.Mahasiswa;
+import com.sr.model.Pendaftaran;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

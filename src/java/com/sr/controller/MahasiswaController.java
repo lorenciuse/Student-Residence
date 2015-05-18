@@ -5,12 +5,12 @@
  */
 package com.sr.controller;
 
-import com.sr.model.akademik.AkademikSR;
-import com.sr.model.akademik.Prestasi;
-import com.sr.model.mahasiswa.IMahasiswaDAO;
-import com.sr.model.mahasiswa.Mahasiswa;
-import com.sr.model.pendaftaran.IPendaftaranDAO;
-import com.sr.model.pendaftaran.Pendaftaran;
+import com.sr.model.AkademikSR;
+import com.sr.model.Prestasi;
+import com.sr.model.dao.IMahasiswaDAO;
+import com.sr.model.Mahasiswa;
+import com.sr.model.dao.IPendaftaranDAO;
+import com.sr.model.Pendaftaran;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

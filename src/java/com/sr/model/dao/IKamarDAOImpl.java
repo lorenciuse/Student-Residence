@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sr.model.kamar;
+package com.sr.model.dao;
 
+import com.sr.model.Kamar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,8 @@ public class IKamarDAOImpl implements IKamarDAO<Kamar> {
     private final String GET_LIST_NOMOR_BY_STATUS = "SELECT DISTINCT NO_KAMAR FROM RESIDENCE WHERE STATUS = ? ORDER BY NO_KAMAR ASC";
     private final String GET_LIST_NOMOR = "SELECT DISTINCT NO_KAMAR FROM RESIDENCE ORDER BY NO_KAMAR ASC";
     private final String ADD_MAHASISWA = "UPDATE RESIDENCE SET NIM = ? WHERE K_NO = ?";
-    private final String GET_ID_BY_NOMOR = "SELECT K_NO FROM RESIDENCE WHERE NO_KAMAR = ? AND NIM IS NULL";
-    private final String GET_NAMA_MHS_FROM_KAMAR = "SELECT NAMA_MHS FROM MAHASISWA WHERE NIM IN (SELECT NIM FROM RESIDENCE WHERE NO_KAMAR = ?)";
+    private final String GET_REMAINING_ID_BY_NOMOR = "SELECT K_NO FROM RESIDENCE WHERE NO_KAMAR = ? AND NIM IS NULL";
+    private final String GET_NAMA_MHS_FROM_KAMAR = "SELECT NAMA_MHS FROM MAHASISWA WHERE NIM IN (SELECT NIM FROM RESIDENCE WHERE NO_KAMAR = ?) AND NIM IN (SELECT NIM FROM DAFTAR WHERE ID_PAMONG = ?)";
     private final String RESET_KAMAR = "";
 
     private JdbcTemplate jdbcTemplate;
@@ -55,7 +56,7 @@ public class IKamarDAOImpl implements IKamarDAO<Kamar> {
     @Override
     public List<String> getIDByNomor(String nomor) {
         List<String> listID = new ArrayList<>();
-        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(GET_ID_BY_NOMOR, new Object[]{nomor});
+        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(GET_REMAINING_ID_BY_NOMOR, new Object[]{nomor});
         for (Map row : rows) {
             listID.add(row.get("K_NO").toString());
         }
@@ -63,9 +64,9 @@ public class IKamarDAOImpl implements IKamarDAO<Kamar> {
     }
 
     @Override
-    public List<String> getNamaFromKamar(String kamar) {
+    public List<String> getNamaFromKamar(String kamar, String idPamong) {
         List<String> listNama = new ArrayList<>();
-        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(GET_NAMA_MHS_FROM_KAMAR, new Object[]{kamar});
+        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(GET_NAMA_MHS_FROM_KAMAR, new Object[]{kamar, idPamong});
         for (Map row : rows) {
             listNama.add(row.get("NAMA_MHS").toString());
         }
