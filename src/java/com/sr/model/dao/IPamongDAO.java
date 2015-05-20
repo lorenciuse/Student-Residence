@@ -6,6 +6,8 @@
 package com.sr.model.dao;
 
 import com.sr.model.Pamong;
+import com.sr.model.Penyakit;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,4 +21,7 @@ public interface IPamongDAO<T> {
     public String findPamongNameById(String idPamong);
     public Pamong findByPamongId(String idPamong);
     public String getLocation(String idPamong);
+    public String getProdi(String nim);
+    public boolean addPenyakit(String sakit, String tanggal, String nim);
+    public List<Penyakit> getListPenyakit(String nim);
 }

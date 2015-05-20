@@ -18,8 +18,8 @@
         <link href="${pageContext.request.contextPath}/resources/plugins/css/AdminLTE.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/sticky-footer-navbar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/jquery.dataTables.min.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.bootstrap.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.responsive.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.responsive.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-duallistbox.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-select.min.css" rel="stylesheet">
     </head>
@@ -125,7 +125,7 @@
                                                         <label class="control-label">Nomor Kamar</label>
                                                         <br><br>
                                                         <%--cowok: 1-4, 13-16 cewek: 5-12--%>
-                                                        <select name="kamar" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
+                                                        <select id="no" name="kamar" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
                                                             <optgroup label="Laki-laki">
                                                                 <c:forEach items="${listCowok}" var="cowok">
                                                                     <option><c:out value="${cowok.getNomor()}"></c:out></option>
@@ -411,14 +411,22 @@
                             <div role="tabpanel" class="tab-pane fade in" id="kesehatan" aria-labelledBy="kesehatan-tab">
                                 <div class="box box-info">
                                     <div class="box-header">
-                                        <h3 class="box-title"><b>Daftar Rekap Kesehatan Mahasiswa</b></h3>
+                                        <div class="col-md-3">
+                                            <h3 class="box-title"><b>Daftar Rekap Kesehatan Mahasiswa</b></h3>
+                                            <form class="form-horizontal"role="form" action="riwayat" method="post">
+                                                <label class="control-label">NIM Mahasiswa</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="nim" class="form-control" value="${nim}">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                     <div class="box-body">
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Tambah Nomor Pendaftaran</h6>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Daftar Nomor Pendaftaran</h6>
+                                        <div class="col-md-offset-2 col-md-8">
+                                            <h6 class="page-header text-center">Daftar Riwayat Sakit</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -448,14 +456,15 @@
         <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery-2.1.3.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/plugins/js/dataTables.bootstrap.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/plugins/js/dataTables.responsive.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/dataTables.bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/dataTables.responsive.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery.bootstrap-duallistbox.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-select.min.js"></script>
         <script>
             $(document).ready(function () {
                 var nama = $('select[name="nama[]"]').bootstrapDualListbox();
                 $('.selectpicker').selectpicker();
+                $('#no').selectpicker('val', "");
                 $('#myTable').dataTable({
                     "pageLength": 5,
                     "lengthChange": false,

@@ -17,6 +17,7 @@
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrapValidator.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/sticky-footer-navbar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/back-to-top.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -84,7 +85,12 @@
                                 <input type="text" class="form-control" name="tempat_lahir" id="tl" placeholder="Tempat Lahir">
                             </div>
                             <div class=" col-sm-4 col-md-4">
-                                <input type="date" class="form-control" name="tanggal_lahir" id="tll" placeholder="Tanggal Lahir">
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type="text" class="form-control" name="tanggal_lahir" id="tll" readonly>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -211,7 +217,7 @@
                                         <input type="text" class="form-control" name="nim" value="" id="nimmhs">
                                     </c:when>
                                     <c:otherwise>
-                                        <input type="text" class="form-control" name="nim" value="${nim}" id="nimmhs">
+                                        <input type="text" class="form-control" name="nim" value="${nim}" id="nimmhs" readonly>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
@@ -451,9 +457,11 @@
         </div>
         <a href="#" class="back-to-top"><span class="glyphicon glyphicon-arrow-up"></span>&nbsp;&nbsp;Kembali ke Atas</a>
         <%@include file="footer.jsp"%>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery-2.1.3.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrapValidator.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/moment-with-locales.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/pages/js/pendaftaran.js"></script>
     </body>
-    <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery-2.1.3.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrapValidator.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/pages/js/pendaftaran.js"></script>
 </html>

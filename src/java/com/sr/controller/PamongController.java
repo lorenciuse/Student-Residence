@@ -10,9 +10,12 @@ import com.sr.model.dao.IKamarDAO;
 import com.sr.model.Kamar;
 import com.sr.model.dao.IMahasiswaDAO;
 import com.sr.model.Mahasiswa;
+import com.sr.model.Pamong;
 import com.sr.model.dao.IPendaftaranDAO;
 import com.sr.model.Pendaftaran;
+import com.sr.model.Penyakit;
 import com.sr.model.Prestasi;
+import com.sr.model.dao.IPamongDAO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,18 +47,40 @@ public class PamongController {
     @Autowired
     private IMahasiswaDAO<Mahasiswa> mhs;
 
+    @Autowired
+    private IPamongDAO<Pamong> pmg;
+
     @RequestMapping("/monev")
-    public String home() {
+    public String home(HttpServletRequest request) {
+        request.getSession().removeAttribute("nama");
+        request.getSession().removeAttribute("maha");
+        request.getSession().removeAttribute("nim");
+        request.getSession().removeAttribute("prodi");
+        request.getSession().removeAttribute("kamar");
         return "monev";
     }
 
     @RequestMapping("/akademik")
-    public String akademik() {
+    public String akademik(HttpServletRequest request) {
+        request.getSession().removeAttribute("nama");
+        request.getSession().removeAttribute("maha");
+        request.getSession().removeAttribute("nim");
+        request.getSession().removeAttribute("prodi");
+        request.getSession().removeAttribute("kamar");
         return "akademik";
     }
 
     @RequestMapping("/monitoring")
-    public String monitoring() {
+    public String monitoring(HttpServletRequest request, ModelMap modelMap) {
+        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
+        modelMap.addAttribute("listCowok", listNomorCowok);
+        modelMap.addAttribute("listCewek", listNomorCewek);
+
+        if (request.getSession().getAttribute("nim") != null) {
+            List<Penyakit> sakit = pmg.getListPenyakit(request.getSession().getAttribute("nim").toString());
+            modelMap.addAttribute("sakit", sakit);
+        }
         return "monitoring";
     }
 
@@ -94,6 +119,11 @@ public class PamongController {
 
     @RequestMapping("/mahasiswa")
     public String mahasiswa(HttpServletRequest request, ModelMap modelMap) {
+        request.getSession().removeAttribute("nama");
+        request.getSession().removeAttribute("maha");
+        request.getSession().removeAttribute("nim");
+        request.getSession().removeAttribute("prodi");
+        request.getSession().removeAttribute("kamar");
         //Modul tampil nomor pendaftaran
         List<Pendaftaran> listNoNim = daftar.getListNoNim(request.getSession().getAttribute("idPamong").toString());
 
@@ -147,6 +177,7 @@ public class PamongController {
             modelMap.addAttribute("asr", asr);
             modelMap.addAttribute("presK", kampus);
             modelMap.addAttribute("presL", luar);
+            modelMap.addAttribute("foto", true);
         }
 
         //Menambahkan semua atribut ke dalam modelmap
@@ -155,7 +186,6 @@ public class PamongController {
         modelMap.addAttribute("listCowok", listNomorCowok);
         modelMap.addAttribute("listCewek", listNomorCewek);
         modelMap.addAttribute("kam", k_nama);
-        modelMap.addAttribute("foto", true);
         return "mahasiswa";
     }
 
@@ -194,5 +224,51 @@ public class PamongController {
         modelMap.addAttribute("presK", kampus);
         modelMap.addAttribute("presL", luar);
         return "biodataprint";
+    }
+
+    @RequestMapping("/carimhs")
+    public String cari(HttpServletRequest request, ModelMap modelMap) {
+        request.getSession().removeAttribute("nim");
+        request.getSession().removeAttribute("maha");
+        request.getSession().removeAttribute("prodi");
+        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
+        List<String> nama = kamar.getNamaFromKamar(request.getParameter("kamar"), request.getSession().getAttribute("idPamong").toString());
+        modelMap.addAttribute("listCowok", listNomorCowok);
+        modelMap.addAttribute("listCewek", listNomorCewek);
+        modelMap.addAttribute("selectedk", true);
+        modelMap.addAttribute("kamar", request.getParameter("kamar"));
+        modelMap.addAttribute("nama", nama);
+        return "monitoring";
+    }
+
+    @RequestMapping("/lihatmhs")
+    public String lihat(HttpServletRequest request, ModelMap modelMap) {
+        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
+        List<String> nama = kamar.getNamaFromKamar(request.getParameter("kam"), request.getSession().getAttribute("idPamong").toString());
+        modelMap.addAttribute("listCowok", listNomorCowok);
+        modelMap.addAttribute("listCewek", listNomorCewek);
+        request.getSession().setAttribute("nama", nama);
+        request.getSession().setAttribute("selectedk", true);
+        request.getSession().setAttribute("selectedm", true);
+        request.getSession().setAttribute("maha", request.getParameter("mhs"));
+        request.getSession().setAttribute("nim", mhs.getNimByNama(request.getParameter("mhs")));
+        request.getSession().setAttribute("prodi", pmg.getProdi(mhs.getNimByNama(request.getParameter("mhs"))));
+        request.getSession().setAttribute("kamar", request.getParameter("kam"));
+        List<Penyakit> sakit = pmg.getListPenyakit(mhs.getNimByNama(request.getParameter("mhs")));
+        modelMap.addAttribute("sakit", sakit);
+        return "monitoring";
+    }
+
+    @RequestMapping("/tambahpenyakit")
+    public String penyakit(HttpServletRequest request, ModelMap modelMap) {
+        String nim = request.getSession().getAttribute("nim").toString();
+        String tanggal = request.getParameter("tanggal_sakit");
+        String[] penyakit = request.getParameterValues("namapenyakit");
+        for (String sakit : penyakit) {
+            pmg.addPenyakit(sakit, tanggal, nim);
+        }
+        return "redirect:/pamong/monitoring#tab_kesehatan";
     }
 }

@@ -71,41 +71,47 @@ public class MahasiswaController {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload sfu = new ServletFileUpload(factory);
         try {
-            List items = sfu.parseRequest(request);
-            FileItem foto = (FileItem) items.get(0);
-            FileItem nama_lengkap = (FileItem) items.get(1);
-            FileItem tempat_lahir = (FileItem) items.get(2);
-            FileItem tanggal_lahir = (FileItem) items.get(3);
-            FileItem agama = (FileItem) items.get(4);
-            FileItem kelamin = (FileItem) items.get(5);
-            FileItem alamat_asal = (FileItem) items.get(6);
-            FileItem kabupaten = (FileItem) items.get(7);
-            FileItem provinsi = (FileItem) items.get(8);
-            FileItem no_telp = (FileItem) items.get(9);
-            FileItem nama_ayah = (FileItem) items.get(10);
-            FileItem nama_ibu = (FileItem) items.get(11);
-            FileItem pend_ayah = (FileItem) items.get(12);
-            FileItem pend_ibu = (FileItem) items.get(13);
-            FileItem pekerjaan_ayah = (FileItem) items.get(14);
-            FileItem pekerjaan_ibu = (FileItem) items.get(15);
-            FileItem pendapatan_ortu = (FileItem) items.get(16);
-            FileItem no_telp_rumah = (FileItem) items.get(17);
-            FileItem no_telp_hp = (FileItem) items.get(18);
-            FileItem alamat_keluarga_terdekat = (FileItem) items.get(19);
-            FileItem no_telp_rumah_terdekat = (FileItem) items.get(20);
-            FileItem no_telp_hp_terdekat = (FileItem) items.get(21);
-            FileItem nim = (FileItem) items.get(22);
-            FileItem prodi = (FileItem) items.get(23);
-            FileItem jurusan = (FileItem) items.get(24);
-            FileItem fakultas = (FileItem) items.get(25);
-            FileItem semester = (FileItem) items.get(26);
-            FileItem ipk_sr = (FileItem) items.get(27);
-            FileItem rapor_smu = (FileItem) items.get(28);
+            List<FileItem> items = sfu.parseRequest(request);
+            FileItem foto = items.get(0);
+            FileItem nama_lengkap = items.get(1);
+            FileItem tempat_lahir = items.get(2);
+            FileItem tanggal_lahir = items.get(3);
+            FileItem agama = items.get(4);
+            FileItem kelamin = items.get(5);
+            FileItem alamat_asal = items.get(6);
+            FileItem kabupaten = items.get(7);
+            FileItem provinsi = items.get(8);
+            FileItem no_telp = items.get(9);
+            FileItem nama_ayah = items.get(10);
+            FileItem nama_ibu = items.get(11);
+            FileItem pend_ayah = items.get(12);
+            FileItem pend_ibu = items.get(13);
+            FileItem pekerjaan_ayah = items.get(14);
+            FileItem pekerjaan_ibu = items.get(15);
+            FileItem pendapatan_ortu = items.get(16);
+            FileItem no_telp_rumah = items.get(17);
+            FileItem no_telp_hp = items.get(18);
+            FileItem alamat_keluarga_terdekat = items.get(19);
+            FileItem no_telp_rumah_terdekat = items.get(20);
+            FileItem no_telp_hp_terdekat = items.get(21);
+            FileItem nim = items.get(22);
+            FileItem prodi = items.get(23);
+            FileItem jurusan = items.get(24);
+            FileItem fakultas = items.get(25);
+            FileItem semester = items.get(26);
+            FileItem ipk_sr = items.get(27);
+            FileItem rapor_smu = items.get(28);
+
+            for (FileItem item : items) {
+                if (item.isFormField()) {
+                    System.out.println("FieldName: " + item.getFieldName() + " value: " + item.getString());
+                }
+            }
 
             List<Prestasi> prestasi = new ArrayList();
             for (int i = 29; i < items.size() - 1; i += 2) {
-                FileItem n = (FileItem) items.get(i);
-                FileItem k = (FileItem) items.get(i + 1);
+                FileItem n = items.get(i);
+                FileItem k = items.get(i + 1);
                 Prestasi pres = new Prestasi();
                 pres.setNim(nim.getString());
                 pres.setNo_sertifikat(n.getString());
@@ -153,7 +159,6 @@ public class MahasiswaController {
             asr.setFakultas(fakultas.getString());
             asr.setRapor_smu(rapor_smu.getString());
             asr.setNim(nim.getString());
-
             daftar.insertBiodata(mhs, asr, foto, prestasi);
         } catch (FileUploadException ex) {
             System.out.println(ex.getMessage());

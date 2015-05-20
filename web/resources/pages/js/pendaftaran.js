@@ -4,7 +4,14 @@
  * and open the template in the editor.
  */
 
-$('#butt').click(function (){
+$(function () {
+    $('#datetimepicker2').datetimepicker({
+        locale: 'id',
+        format: 'DD MMMM YYYY'
+    });
+});
+
+$('#butt').click(function () {
     $('#nonbutt').click();
 });
 
@@ -14,42 +21,10 @@ function editfield() {
     var ttl = $('#ttl').text();
     var split = ttl.split(", ");
     var tempatlahir = split[0];
-
-    //dd Month yyyy
     var tanggallahir = split[1];
-    //format tanggal ke yyyy-mm-dd
-    var day = tanggallahir.split("/")[0];
-    var month = tanggallahir.split("/")[1];
-    month = month.split(" ")[0];
-    var year = tanggallahir.split("/")[2];
-    var mon;
-    if (month === "Januari") {
-        mon = "01";
-    } else if (month === "Februari") {
-        mon = "02";
-    } else if (month === "Maret") {
-        mon = "03";
-    } else if (month === "April") {
-        mon = "04";
-    } else if (month === "Mei") {
-        mon = "05";
-    } else if (month === "Juni") {
-        mon = "06";
-    } else if (month === "Juli") {
-        mon = "07";
-    } else if (month === "Agustus") {
-        mon = "08";
-    } else if (month === "September") {
-        mon = "09";
-    } else if (month === "Oktober") {
-        mon = "10";
-    } else if (month === "November") {
-        mon = "11";
-    } else if (month === "Desember") {
-        mon = "12";
-    }
-    tanggallahir = year + "-" + mon + "-" + day;
-    //akhir format
+    var day = tanggallahir.split(/[\s,]+/)[0];
+    var month = tanggallahir.split(/[\s,]+/)[1];
+    var year = tanggallahir.split(/[\s,]+/)[2];
 
     var agama = $('#agama').text();
     var kelamin = $('#kelamin').text();
@@ -76,10 +51,10 @@ function editfield() {
     var semester = $('#semes').text();
     var ipk = $('#ipk').text();
     var rapor = $('#rata').text();
-    
+
     $('#nl').attr("value", nama);
     $('#tl').attr("value", tempatlahir);
-    $('#tll').attr("value", tanggallahir);
+    $('#tll').attr("value", day + " " + month + " " + year);
     $('select[name=agama]').val(agama).change();
     if (kelamin === "Pria") {
         $('#pria').attr("checked", "checked");
@@ -155,7 +130,7 @@ $(function () {
     $('#addbtn').click(function () {
         var elems =
                 '<div class="input-group" style="margin-bottom: 1em" id="childkegiatan' + (counter) + '">' +
-                '<input type="text" class="form-control" name="sertifikatkegiatan" placeholder="Nomor Sertifikat">' + 
+                '<input type="text" class="form-control" name="sertifikatkegiatan" placeholder="Nomor Sertifikat">' +
                 '<input type="text" class="form-control" name="kegiatan" placeholder="Nama Kegiatan">' +
                 '<a class="input-group-addon btn btn-default" onclick="removeElement(\'parentkegiatan\',\'childkegiatan' + (counter) + '\')"> - </a>' +
                 '</div>';
