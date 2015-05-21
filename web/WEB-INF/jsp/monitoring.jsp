@@ -21,6 +21,7 @@
         <link href="${pageContext.request.contextPath}/resources/plugins/css/jquery.dataTables.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.responsive.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-clockpicker.min.css" rel="stylesheet">
         <style>
             select {
                 visibility: hidden;
@@ -104,7 +105,7 @@
                             <div id="myTabContent" class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade in active" id="aktivitas" aria-labelledBy="aktivitas-tab">
                                     <h3 class="page-header"><span class="glyphicon glyphicon-list-alt"></span> Catatan Aktivitas Harian</h3>
-                                    <form class="form-inline" role="form" action="" method="">
+                                    <form class="form-inline" role="form" action="aktivitas" method="post">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6">
                                                 <div class="form-group">
@@ -284,28 +285,42 @@
                                     <div class="form-group">
                                         <label for="tanggal_berangkat" class="col-sm-2 col-md-2 control-label">Tanggal Berangkat</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="date" class="form-control" name="tanggal_berangkat" id='tanggal_berangkat' 
-                                                   onchange='transform("tanggal_berangkat", "tgl_berangkat")'>
-                                            <input type='hidden' name='tgl_berangkat' id='tgl_berangkat'>
+                                            <div class='input-group date' id='datetimepicker4'>
+                                                <input type="text" class="form-control" name="tanggal_berangkat" id='tanggal_berangkat' readonly>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
                                         </div>
                                         <label for="tanggal_kembali" class="col-sm-2 col-md-2 control-label">Tanggal Kembali</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="date" class="form-control" name="tanggal_kembali" id='tanggal_kembali'
-                                                   onchange="transform('tanggal_kembali', 'tgl_kembali')">
-                                            <input type='hidden' name='tgl_kembali' id='tgl_kembali'>
+                                            <div class='input-group date' id='datetimepicker5'>
+                                                <input type="text" class="form-control" name="tanggal_kembali" id='tanggal_kembali' readonly>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="jam_berangkat" class="col-sm-2 col-md-2 control-label">Jam Berangkat</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="time" class="form-control" name="jam_berangkat" id='jam_berangkat'
-                                                   onchange="transform('jam_berangkat', 'jam_brkt')"/>
+                                            <div class="input-group clockpicker">
+                                                <input id="jam_berangkat" name="jam_berangkat" type="text" class="form-control" readonly onchange="transform('jam_berangkat', 'jam_brkt')">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                </span>
+                                            </div>
                                             <input type='hidden' name='jam_brkt' id='jam_brkt'>
                                         </div>
                                         <label for="jam_kembali" class="col-sm-2 col-md-2 control-label">Jam Kembali</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="time" class="form-control" name="jam_kembali"
-                                                   onchange="transform('jam_kembali', 'jam_kbl')">
+                                            <div class="input-group clockpicker">
+                                                <input id="jam_kembali" name="jam_kembali" type="text" class="form-control" readonly onchange="transform('jam_kembali', 'jam_kbl')">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                </span>
+                                            </div>
                                             <input type='hidden' name='jam_kbl' id='jam_kbl'>
                                         </div>
                                     </div> 
@@ -321,16 +336,6 @@
                                 <form id="IzinKeluar" class="form-horizontal" role="form" action="perizinan" method="post">
                                     <input type='hidden' name='tipe' value='keluar'/>
                                     <div class="form-group">
-                                        <label for="nim" class="col-sm-2 col-md-2 control-label">NIM</label>
-                                        <div class="col-sm-4 col-md-4">
-                                            <input type="text" class="form-control" name="nim">
-                                        </div>
-                                        <label for="nomor_kamar" class="col-sm-2 col-md-2 control-label">Nomor Kamar</label>
-                                        <div class="col-sm-4 col-md-4">
-                                            <input type="text" class="form-control" name="nomor_kamar">
-                                        </div>
-                                    </div> 
-                                    <div class="form-group">
                                         <label for="alamat_keluar" class="col-sm-2 col-md-2 control-label">Alamat Keluar</label>
                                         <div class="col-sm-4 col-md-4">
                                             <textarea rows="2" class="form-control" name="alamat_keluar"></textarea>
@@ -343,22 +348,33 @@
                                     <div class="form-group">
                                         <label for="tanggal_keluar" class="col-sm-2 col-md-2 control-label">Hari/Tanggal</label>
                                         <div class=" col-sm-4 col-md-4">
-                                            <input type="date" class="form-control" name="tanggal_keluar" id='tanggal_keluar' 
-                                                   onchange="transform('tanggal_keluar', 'tgl_keluar')">
-                                            <input type='hidden' id='tgl_keluar' name='tgl_keluar'>
+                                            <div class='input-group date' id='datetimepicker6'>
+                                                <input type="text" class="form-control" name="tanggal_keluar" id='tanggal_keluar' readonly>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="jam_keluar" class="col-sm-2 col-md-2 control-label">Jam Keluar</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="time" class="form-control" name="jam_keluar" id='jam_keluar' 
-                                                   onchange="transform('jam_keluar', 'jamKeluar')">
+                                            <div class="input-group clockpicker">
+                                                <input id="jam_keluar" name="jam_keluar" type="text" class="form-control" readonly onchange="transform('jam_keluar', 'jamKeluar')">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                </span>
+                                            </div>
                                             <input type="hidden" name='jamKeluar' id='jamKeluar'>
                                         </div>
                                         <label for="jam_kembali" class="col-sm-2 col-md-2 control-label">Jam Kembali</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="time" class="form-control" id="jam_kembali" 
-                                                   onchange="transform('jam_kembali', 'jamKembali')">
+                                            <div class="input-group clockpicker">
+                                                <input id="jam_kmbli" name="jam_kmbli" type="text" class="form-control" readonly onchange="transform('jam_kmbli', 'jamKembali')">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                </span>
+                                            </div>
                                             <input type='hidden' id='jamKembali' name='jamKembali'>
                                         </div>
                                     </div>
@@ -388,19 +404,25 @@
     <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-datetimepicker.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-select.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/js/icheck.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-clockpicker.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/pages/js/monitoring.js"></script>
     <script>
-        $(document).ready(function () {
-        <c:choose>
-            <c:when test = "${selectedk}">
-        $('#kamar').selectpicker('val', document.getElementById("kam").value);
-            </c:when>
-        </c:choose>
-        <c:choose>
-            <c:when test = "${selectedm}">
-        $('#mhs').selectpicker('val', document.getElementById("maha").value);
-            </c:when>
-        </c:choose>
+        $('.clockpicker').clockpicker({
+            donetext: 'Ya',
+            autoclose: true,
+            placement: 'top'
         });
+        
+        $(document).ready(function () {
+                <c:choose>
+                    <c:when test = "${selectedk}">
+                        $('#kamar').selectpicker('val', document.getElementById("kam").value);
+                    </c:when>
+                </c:choose>
+        <c:choose >
+            <c:when test = "${selectedm}">
+                $('#mhs').selectpicker('val', document.getElementById("maha").value);
+            </c:when>
+        </c:choose>});
     </script>
 </html>

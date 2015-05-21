@@ -5,13 +5,11 @@
  */
 package com.sr.model;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Lorencius
  */
-public class Mahasiswa implements Serializable {
+public class Mahasiswa {
 
     private String nim;
     private String nama_mhs;
@@ -35,7 +33,6 @@ public class Mahasiswa implements Serializable {
     private String alamat_keluarga;
     private String no_tel_keluarga;
     private String no_hp_keluarga;
-    private String path_foto;
 
     public String getNim() {
         return nim;
@@ -219,13 +216,5 @@ public class Mahasiswa implements Serializable {
 
     public void setNo_hp_keluarga(String no_hp_keluarga) {
         this.no_hp_keluarga = no_hp_keluarga;
-    }
-
-    public String getPath_foto() {
-        return path_foto;
-    }
-
-    public void setPath_foto(String path_foto) {
-        this.path_foto = path_foto;
     }
 }

@@ -5,13 +5,12 @@
  */
 package com.sr.model;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Lorencius
  */
-public class Pamong implements Serializable {
+public class Pamong {
+
     private String username;
     private String password;
     private String nama;
@@ -48,5 +47,5 @@ public class Pamong implements Serializable {
     public void setLokasi(String lokasi) {
         this.lokasi = lokasi;
     }
-    
+
 }

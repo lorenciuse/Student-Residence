@@ -10,6 +10,7 @@ package com.sr.model;
  * @author Lorencius
  */
 public class Prestasi {
+
     private String no_sertifikat;
     private String nama_prestasi;
     private String jenis_prestasi;
@@ -46,5 +47,5 @@ public class Prestasi {
     public void setNim(String nim) {
         this.nim = nim;
     }
-        
+
 }

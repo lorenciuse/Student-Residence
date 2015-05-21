@@ -4,10 +4,29 @@
  * and open the template in the editor.
  */
 
+//$(function () {
+//    $('#inputberangkat').datetimepicker({
+//        locale: 'id',
+//        format: 'LT'
+//    });
+//    $('#inputkembali').datetimepicker({
+//        locale: 'id',
+//        format: 'LT'
+//    });
+//    $('#inputkeluar').datetimepicker({
+//        locale: 'id',
+//        format: 'LT'
+//    });
+//    $('#inputkembali1').datetimepicker({
+//        locale: 'id',
+//        format: 'LT'
+//    });
+//});
+
 function transform(dateInputId, dateOutputId) {
     var tgl = document.getElementById(dateInputId);
     var tgl1 = document.getElementById(dateOutputId);
-    tgl1.value = tgl.valueAsNumber;
+    tgl1.value = tgl.value;
 }
 
 $(function () {
@@ -28,12 +47,23 @@ $(function () {
         locale: 'id',
         format: 'DD MMMM YYYY'
     });
+    $('#datetimepicker4').datetimepicker({
+        locale: 'id',
+        format: 'DD MMMM YYYY'
+    });
+    $('#datetimepicker5').datetimepicker({
+        locale: 'id',
+        format: 'DD MMMM YYYY'
+    });
+    $('#datetimepicker6').datetimepicker({
+        locale: 'id',
+        format: 'DD MMMM YYYY'
+    });
 });
 
 //script untuk menambahkan field kegiatan kampus
 $(function () {
     var counter = 2;
-
     $('#addbtn').click(function () {
         var elems =
                 '<div class = "input-group" style="margin-bottom: 1em" id = "childpenyakit' + (counter) + '">' +
@@ -68,7 +98,6 @@ $(document).ready(function () {
     $('#select-all').click(function () {
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck('check');
     });
-
     $(document.getElementById('monitoring')).addClass("active");
     $('#labelIzinInap').hide();
     $('#IzinInap').hide();
@@ -81,7 +110,6 @@ $(document).ready(function () {
         $('#tombolIzinInap').removeClass('disabled');
         $('#tombolIzinKeluar').addClass('disabled');
     });
-
     $('#tombolIzinInap').click(function () {
         $('#labelIzinInap').show();
         $('#labelIzinKeluar').hide();
@@ -90,7 +118,6 @@ $(document).ready(function () {
         $('#tombolIzinKeluar').removeClass('disabled');
         $('#tombolIzinInap').addClass('disabled');
     });
-
     $('#myTable').dataTable({
         "pageLength": 8,
         "lengthChange": false,

@@ -5,13 +5,11 @@
  */
 package com.sr.model;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Lorencius
  */
-public class Kamar implements Serializable{
+public class Kamar{
     private String nomor;
     private String nim;
     private String status;

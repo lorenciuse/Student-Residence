@@ -5,14 +5,12 @@
  */
 package com.sr.model;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Lorencius
  */
-public class Penyakit implements Serializable{
-    
+public class Penyakit {
+
     private String nama_penyakit;
     private String tanggal_sakit;
 
@@ -30,5 +28,5 @@ public class Penyakit implements Serializable{
 
     public void setTanggal_sakit(String tanggal_sakit) {
         this.tanggal_sakit = tanggal_sakit;
-    }  
+    }
 }

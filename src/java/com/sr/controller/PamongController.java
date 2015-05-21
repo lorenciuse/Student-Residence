@@ -6,12 +6,12 @@
 package com.sr.controller;
 
 import com.sr.model.AkademikSR;
-import com.sr.model.dao.IKamarDAO;
+import com.sr.model.Inap;
 import com.sr.model.Kamar;
+import com.sr.model.Keluar;
 import com.sr.model.dao.IMahasiswaDAO;
 import com.sr.model.Mahasiswa;
 import com.sr.model.Pamong;
-import com.sr.model.dao.IPendaftaranDAO;
 import com.sr.model.Pendaftaran;
 import com.sr.model.Penyakit;
 import com.sr.model.Prestasi;
@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,12 +39,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/")
 public class PamongController {
-
-    @Autowired
-    private IPendaftaranDAO<Pendaftaran> daftar;
-
-    @Autowired
-    private IKamarDAO<Kamar> kamar;
 
     @Autowired
     private IMahasiswaDAO<Mahasiswa> mhs;
@@ -72,8 +68,8 @@ public class PamongController {
 
     @RequestMapping("/monitoring")
     public String monitoring(HttpServletRequest request, ModelMap modelMap) {
-        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
-        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
+        List<Kamar> listNomorCowok = pmg.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = pmg.getListNomorByStatus("Cewek");
         modelMap.addAttribute("listCowok", listNomorCowok);
         modelMap.addAttribute("listCewek", listNomorCewek);
 
@@ -95,7 +91,7 @@ public class PamongController {
         pendaftaran.setNIM(request.getParameter("nim"));
         pendaftaran.setNoPendaftaran(request.getParameter("nomor_pendaftaran"));
         pendaftaran.setIdPamong(request.getSession().getAttribute("idPamong").toString());
-        daftar.insertNomor(pendaftaran);
+        pmg.insertNomor(pendaftaran);
         return "redirect:/pamong/mahasiswa#tab_pendaftaran";
     }
 
@@ -103,10 +99,10 @@ public class PamongController {
     public String kamar(HttpServletRequest request, ModelMap modelMap) {
         String[] nama = request.getParameterValues("nama[]");
         String no = request.getParameter("kamar");
-        List<String> id = kamar.getIDByNomor(no);
+        List<String> id = pmg.getIDByNomor(no);
 
         for (int i = 0; i < nama.length; i++) {
-            kamar.addMahasiswa(mhs.getNimByNama(nama[i]), id.get(i));
+            pmg.addMahasiswa(mhs.getNimByNama(nama[i]), id.get(i));
         }
         return "redirect:/pamong/mahasiswa#tab_kamar";
     }
@@ -125,19 +121,19 @@ public class PamongController {
         request.getSession().removeAttribute("prodi");
         request.getSession().removeAttribute("kamar");
         //Modul tampil nomor pendaftaran
-        List<Pendaftaran> listNoNim = daftar.getListNoNim(request.getSession().getAttribute("idPamong").toString());
+        List<Pendaftaran> listNoNim = pmg.getListNoNim(request.getSession().getAttribute("idPamong").toString());
 
         //Modul pergantian nomor kamar
         List<String> listNama = mhs.getListNama();
-        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
-        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
+        List<Kamar> listNomorCowok = pmg.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = pmg.getListNomorByStatus("Cewek");
 
         String k_nama = "";
-        List<String> listNomor = kamar.getListNomor();
+        List<String> listNomor = pmg.getListNomor();
         for (int i = 0; i < listNomor.size(); i++) {
             k_nama += "<tr>\n"
                     + "<td>\n" + listNomor.get(i) + "</td>\n";
-            List<String> listNam = kamar.getNamaFromKamar(listNomor.get(i), request.getSession().getAttribute("idPamong").toString());
+            List<String> listNam = pmg.getNamaFromKamar(listNomor.get(i), request.getSession().getAttribute("idPamong").toString());
             if (!listNam.isEmpty()) {
                 if (listNam.size() == 3) {
                     k_nama += "<td>\n" + listNam.get(0) + "</td>\n";
@@ -168,10 +164,10 @@ public class PamongController {
         }
 
         if (request.getParameter("nim") != null) {
-            Mahasiswa maha = daftar.getBiodataByNim(request.getParameter("nim"));
-            AkademikSR asr = daftar.getAkademikByNim(request.getParameter("nim"));
-            List<Prestasi> kampus = daftar.getPrestasiByNimJenis(request.getParameter("nim"), "Kampus");
-            List<Prestasi> luar = daftar.getPrestasiByNimJenis(request.getParameter("nim"), "Luar Kampus");
+            Mahasiswa maha = mhs.getBiodataByNim(request.getParameter("nim"));
+            AkademikSR asr = mhs.getAkademikByNim(request.getParameter("nim"));
+            List<Prestasi> kampus = mhs.getPrestasiByNimJenis(request.getParameter("nim"), "Kampus");
+            List<Prestasi> luar = mhs.getPrestasiByNimJenis(request.getParameter("nim"), "Luar Kampus");
             modelMap.addAttribute("nim", request.getParameter("nim"));
             modelMap.addAttribute("mhs", maha);
             modelMap.addAttribute("asr", asr);
@@ -192,7 +188,7 @@ public class PamongController {
     @RequestMapping("/lihatfoto")
     public void lihatfoto(@RequestParam("nim") String nim, HttpServletRequest request, HttpServletResponse response) {
         try {
-            Blob blob = daftar.getFotoByNim(nim);
+            Blob blob = mhs.getFotoByNim(nim);
             response.setContentType("image/jpeg");
             response.setContentLength((int) blob.length());
             InputStream inputStream = blob.getBinaryStream();
@@ -214,10 +210,10 @@ public class PamongController {
     @RequestMapping("/biodata-print")
     public String biodataprint(HttpServletRequest request, ModelMap modelMap) {
         System.out.println("NIM " + request.getParameter("nim"));
-        Mahasiswa maha = daftar.getBiodataByNim(request.getParameter("nim"));
-        AkademikSR asr = daftar.getAkademikByNim(request.getParameter("nim"));
-        List<Prestasi> kampus = daftar.getPrestasiByNimJenis(request.getParameter("nim"), "Kampus");
-        List<Prestasi> luar = daftar.getPrestasiByNimJenis(request.getParameter("nim"), "Luar Kampus");
+        Mahasiswa maha = mhs.getBiodataByNim(request.getParameter("nim"));
+        AkademikSR asr = mhs.getAkademikByNim(request.getParameter("nim"));
+        List<Prestasi> kampus = mhs.getPrestasiByNimJenis(request.getParameter("nim"), "Kampus");
+        List<Prestasi> luar = mhs.getPrestasiByNimJenis(request.getParameter("nim"), "Luar Kampus");
         modelMap.addAttribute("nim", request.getParameter("nim"));
         modelMap.addAttribute("mhs", maha);
         modelMap.addAttribute("asr", asr);
@@ -231,9 +227,9 @@ public class PamongController {
         request.getSession().removeAttribute("nim");
         request.getSession().removeAttribute("maha");
         request.getSession().removeAttribute("prodi");
-        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
-        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
-        List<String> nama = kamar.getNamaFromKamar(request.getParameter("kamar"), request.getSession().getAttribute("idPamong").toString());
+        List<Kamar> listNomorCowok = pmg.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = pmg.getListNomorByStatus("Cewek");
+        List<String> nama = pmg.getNamaFromKamar(request.getParameter("kamar"), request.getSession().getAttribute("idPamong").toString());
         modelMap.addAttribute("listCowok", listNomorCowok);
         modelMap.addAttribute("listCewek", listNomorCewek);
         modelMap.addAttribute("selectedk", true);
@@ -244,9 +240,9 @@ public class PamongController {
 
     @RequestMapping("/lihatmhs")
     public String lihat(HttpServletRequest request, ModelMap modelMap) {
-        List<Kamar> listNomorCowok = kamar.getListNomorByStatus("Cowok");
-        List<Kamar> listNomorCewek = kamar.getListNomorByStatus("Cewek");
-        List<String> nama = kamar.getNamaFromKamar(request.getParameter("kam"), request.getSession().getAttribute("idPamong").toString());
+        List<Kamar> listNomorCowok = pmg.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = pmg.getListNomorByStatus("Cewek");
+        List<String> nama = pmg.getNamaFromKamar(request.getParameter("kam"), request.getSession().getAttribute("idPamong").toString());
         modelMap.addAttribute("listCowok", listNomorCowok);
         modelMap.addAttribute("listCewek", listNomorCewek);
         request.getSession().setAttribute("nama", nama);
@@ -267,8 +263,49 @@ public class PamongController {
         String tanggal = request.getParameter("tanggal_sakit");
         String[] penyakit = request.getParameterValues("namapenyakit");
         for (String sakit : penyakit) {
-            pmg.addPenyakit(sakit, tanggal, nim);
+            pmg.insertPenyakit(sakit, tanggal, nim);
         }
         return "redirect:/pamong/monitoring#tab_kesehatan";
+    }
+
+    @RequestMapping("/perizinan")
+    public String perizinan(HttpServletRequest request) {
+        String tipeIzin = request.getParameter("tipe");
+        switch (tipeIzin) {
+            case "inap":
+                Inap inap = new Inap();
+                inap.setNama_tujuan(request.getParameter("nama_dituju"));
+                inap.setTelp(request.getParameter("nomor_telepon_dituju"));
+                inap.setKeperluan(request.getParameter("keperluan_inap"));
+                inap.setAlamat(request.getParameter("alamat_inap"));
+                inap.setBerangkat(request.getParameter("tanggal_berangkat"));
+                inap.setKembali(request.getParameter("tanggal_kembali"));
+                inap.setWaktu_berangkat(request.getParameter("jam_brkt"));
+                inap.setWaktu_kembali(request.getParameter("jam_kbl"));
+                System.out.println("Tanggal Berangkat " + inap.getBerangkat());
+                System.out.println("Tanggal Kembali " + inap.getKembali());
+                System.out.println("Jam Berangkat " + inap.getWaktu_berangkat());
+                System.out.println("Jam Kembali " + inap.getWaktu_kembali());
+                pmg.insertInap(inap, request.getSession().getAttribute("nim").toString());
+                break;
+            case "keluar":
+                Keluar keluar = new Keluar();
+                keluar.setAlamat(request.getParameter("alamat_keluar"));
+                keluar.setKeperluan(request.getParameter("keperluan_keluar"));
+                keluar.setTanggal_keluar(request.getParameter("tanggal_keluar"));
+                keluar.setWaktu_keluar(request.getParameter("jamKeluar"));
+                keluar.setWaktu_kembali(request.getParameter("jamKembali"));
+                System.out.println("Tanggal Keluar " + keluar.getTanggal_keluar());
+                System.out.println("Jam Keluar " + keluar.getWaktu_keluar());
+                System.out.println("Jam Kembali " + keluar.getWaktu_kembali());
+                pmg.insertKeluar(keluar, request.getSession().getAttribute("nim").toString());
+                break;
+        }
+        return "redirect:/pamong/monitoring#tab_perizinan";
+    }
+
+    @RequestMapping("/aktivitas")
+    public String aktivitas(HttpServletRequest request) {
+        return "redirect:/pamong/monitoring#tab_aktivitas";
     }
 }

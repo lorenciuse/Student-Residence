@@ -5,13 +5,12 @@
  */
 package com.sr.model;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Lorencius
  */
-public class Pendaftaran implements Serializable{
+public class Pendaftaran {
+
     private String noPendaftaran;
     private String nim;
     private String idPamong;
