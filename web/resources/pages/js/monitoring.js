@@ -4,25 +4,6 @@
  * and open the template in the editor.
  */
 
-//$(function () {
-//    $('#inputberangkat').datetimepicker({
-//        locale: 'id',
-//        format: 'LT'
-//    });
-//    $('#inputkembali').datetimepicker({
-//        locale: 'id',
-//        format: 'LT'
-//    });
-//    $('#inputkeluar').datetimepicker({
-//        locale: 'id',
-//        format: 'LT'
-//    });
-//    $('#inputkembali1').datetimepicker({
-//        locale: 'id',
-//        format: 'LT'
-//    });
-//});
-
 function transform(dateInputId, dateOutputId) {
     var tgl = document.getElementById(dateInputId);
     var tgl1 = document.getElementById(dateOutputId);
@@ -39,26 +20,9 @@ $(function () {
 });
 
 $(function () {
-    $('#datetimepicker2').datetimepicker({
-        locale: 'id',
-        format: 'DD MMMM YYYY'
-    });
-    $('#datetimepicker3').datetimepicker({
-        locale: 'id',
-        format: 'DD MMMM YYYY'
-    });
-    $('#datetimepicker4').datetimepicker({
-        locale: 'id',
-        format: 'DD MMMM YYYY'
-    });
-    $('#datetimepicker5').datetimepicker({
-        locale: 'id',
-        format: 'DD MMMM YYYY'
-    });
-    $('#datetimepicker6').datetimepicker({
-        locale: 'id',
-        format: 'DD MMMM YYYY'
-    });
+    var datetime = ['2', '3', '4', '5', '6', '7', '8'],
+            d = datetime.length, h;
+    for (h = 0; h < d; h++)$("#datetimepicker"+datetime[h]).datetimepicker({locale: 'id',format: 'DD MMMM YYYY'});
 });
 
 //script untuk menambahkan field kegiatan kampus
@@ -77,7 +41,7 @@ $(function () {
 
 //script untuk menghapus field kegiatan kampus dan luar kampus
 function removeElement(parentDiv, childDiv) {
-    if (childDiv == parentDiv) {
+    if (childDiv === parentDiv) {
         alert("The parent div cannot be removed.");
     }
     else if (document.getElementById(childDiv)) {
@@ -95,8 +59,13 @@ $(document).ready(function () {
     $('.selectpicker').selectpicker();
     $('#kamar').selectpicker('val', "");
     $('#mhs').selectpicker('val', "");
-    $('#select-all').click(function () {
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck('check');
+    $(document).ready(function () {
+        $('#select-all').click(function (event) {
+            $('.minimal').each(function () { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class minimal              
+            });
+        });
+
     });
     $(document.getElementById('monitoring')).addClass("active");
     $('#labelIzinInap').hide();
@@ -123,11 +92,22 @@ $(document).ready(function () {
         "lengthChange": false,
         responsive: true
     });
-});
-
-$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-    checkboxClass: 'icheckbox_minimal-blue',
-    radioClass: 'iradio_minimal-blue'
+    $('#keterangan_lisan').hide();
+    $('#keterangan_tertulis').hide();
+    var lisan = ['#l1', '#l2', '#l3'],
+            l = lisan.length, i;
+    for (i = 0; i < l; i++)$(lisan[i]).click(function (){$('#keterangan_tertulis').hide();$('#keterangan_lisan').slideDown().show('slow');});
+    var tertulis = ['#tl1', '#tl2', '#tl3'],
+            t = tertulis.length, j;
+    for (j = 0; j < t; j++)$(tertulis[j]).click(function (){$('#keterangan_lisan').hide();$('#keterangan_tertulis').slideDown().show('slow');});
+    
+    var buttlisan = ['#l1', '#l2', '#l3'], k;
+    var count_lisan = document.getElementById("total_lisan").value;
+    for (k = 0; k < count_lisan; k++)$(buttlisan[k]).addClass("disabled");
+    var butttertulis = ['#tl1', '#tl2', '#tl3'], l;
+    var count_tertulis = document.getElementById("total_tertulis").value;
+    for (l = 0; l < count_tertulis; l++)$(butttertulis[l]).addClass("disabled");
+    console.log(count_lisan);
 });
 
 // Javascript to enable link to tab

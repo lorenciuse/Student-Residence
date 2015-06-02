@@ -5,8 +5,10 @@
  */
 package com.sr.model.dao;
 
+import com.sr.model.Aktivitas;
 import com.sr.model.Inap;
 import com.sr.model.Kamar;
+import com.sr.model.Kedisiplinan;
 import com.sr.model.Keluar;
 import com.sr.model.Pamong;
 import com.sr.model.Pendaftaran;
@@ -43,7 +45,9 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
     private final String INSERT_NOMOR = "INSERT INTO DAFTAR VALUES(?,?,?)";
     private final String INSERT_INAP = "INSERT INTO IZIN_INAP(NAMA_DITUJU, ALAMAT_TUJUAN, MO_TELPON_DITUJU, KEPERLUAN, TANGGAL_PERGI, TANGGAL_KEMBALI, WAKTU_KELUAR, WAKTU_KEMBALI, NIM) VALUES (?,?,?,?,?,?,?,?,?)";
     private final String INSERT_KELUAR = "INSERT INTO IZIN_KELUAR(ALAMAT_TUJUAN, KEPERLUAN, TANGGAL_IJIN_KELUAR, WAKTU_KELUAR, WAKTU_KEMBALI, NIM) VALUES(?,?,?,?,?,?)";
-    private final String INSERT_ACTIVITY = "";
+    private final String INSERT_ACTIVITY = "INSERT INTO AKTIFITAS_MHS(BANGUN_PAGI, OPERA_PAGI, MANDI, DOA_PAGI, STUDY, DOA_MALAM, TIDUR_MALAM, TANGGAL_AKTIFITAS, NIM) VALUES(?,?,?,?,?,?,?,?,?)";
+    private final String INSERT_KEDISIPLINAN = "INSERT INTO PERINGATAN(JENIS_PERINGATAN, KETERANGAN, TANGGAL_PERINGATAN, NIM) VALUES(?,?,?,?)";
+    private final String GET_JUMLAH_PERINGATAN = "SELECT COUNT(NIM) FROM PERINGATAN WHERE JENIS_PERINGATAN = ? AND NIM = ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -186,8 +190,20 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
     }
 
     @Override
-    public boolean insertActivity() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean insertActivity(Aktivitas act, String nim) {
+        getJdbcTemplate().update(INSERT_ACTIVITY, new Object[]{act.getBangun_pagi(), act.getOpera_pagi(), act.getGebyur_wc(), act.getDoa_pagi(), act.getStudi(), act.getDoa_malam(), act.getTidur_malam(), act.getTanggal_aktivitas(), nim});
+        return true;
+    }
+
+    @Override
+    public boolean insertKedisiplinan(Kedisiplinan kedisiplinan, String nim) {
+        getJdbcTemplate().update(INSERT_KEDISIPLINAN, new Object[]{kedisiplinan.getJenis(), kedisiplinan.getKeterangan(), kedisiplinan.getTanggal_peringatan(), nim});
+        return true;
+    }
+
+    @Override
+    public int getJumlahPeringatanByJenis(String jenis, String nim) {
+        return (int) getJdbcTemplate().queryForObject(GET_JUMLAH_PERINGATAN, new Object[]{jenis, nim}, Integer.class);
     }
 
     public class PenyakitRowMapper implements RowMapper {

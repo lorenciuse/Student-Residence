@@ -6,8 +6,10 @@
 package com.sr.controller;
 
 import com.sr.model.AkademikSR;
+import com.sr.model.Aktivitas;
 import com.sr.model.Inap;
 import com.sr.model.Kamar;
+import com.sr.model.Kedisiplinan;
 import com.sr.model.Keluar;
 import com.sr.model.dao.IMahasiswaDAO;
 import com.sr.model.Mahasiswa;
@@ -20,9 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,6 +76,10 @@ public class PamongController {
         if (request.getSession().getAttribute("nim") != null) {
             List<Penyakit> sakit = pmg.getListPenyakit(request.getSession().getAttribute("nim").toString());
             modelMap.addAttribute("sakit", sakit);
+            int lisan = pmg.getJumlahPeringatanByJenis("Lisan", request.getSession().getAttribute("nim").toString());
+            int tertulis = pmg.getJumlahPeringatanByJenis("Tertulis", request.getSession().getAttribute("nim").toString());
+            modelMap.addAttribute("lisan", lisan);
+            modelMap.addAttribute("tertulis", tertulis);
         }
         return "monitoring";
     }
@@ -254,6 +258,10 @@ public class PamongController {
         request.getSession().setAttribute("kamar", request.getParameter("kam"));
         List<Penyakit> sakit = pmg.getListPenyakit(mhs.getNimByNama(request.getParameter("mhs")));
         modelMap.addAttribute("sakit", sakit);
+        int lisan = pmg.getJumlahPeringatanByJenis("Lisan", request.getSession().getAttribute("nim").toString());
+        int tertulis = pmg.getJumlahPeringatanByJenis("Tertulis", request.getSession().getAttribute("nim").toString());
+        modelMap.addAttribute("lisan", lisan);
+        modelMap.addAttribute("tertulis", tertulis);
         return "monitoring";
     }
 
@@ -306,6 +314,26 @@ public class PamongController {
 
     @RequestMapping("/aktivitas")
     public String aktivitas(HttpServletRequest request) {
+        Aktivitas act = new Aktivitas();
+        act.setBangun_pagi(request.getParameter("bangun"));
+        act.setOpera_pagi(request.getParameter("opera_pagi"));
+        act.setGebyur_wc(request.getParameter("doa_pagi"));
+        act.setDoa_pagi(request.getParameter("studi"));
+        act.setStudi(request.getParameter("gebyur_wc"));
+        act.setDoa_malam(request.getParameter("doa_malam"));
+        act.setTidur_malam(request.getParameter("tidur_malam"));
+        act.setTanggal_aktivitas(request.getParameter("tanggal_aktivitas"));
+        pmg.insertActivity(act, request.getSession().getAttribute("nim").toString());
         return "redirect:/pamong/monitoring#tab_aktivitas";
+    }
+
+    @RequestMapping("/kedisiplinan")
+    public String kedisiplinan(HttpServletRequest request) {
+        Kedisiplinan kedisiplinan = new Kedisiplinan();
+        kedisiplinan.setJenis(request.getParameter("jenis_peringatan"));
+        kedisiplinan.setKeterangan(request.getParameter("keterangan"));
+        kedisiplinan.setTanggal_peringatan(request.getParameter("tanggal_peringatan"));
+        pmg.insertKedisiplinan(kedisiplinan, request.getSession().getAttribute("nim").toString());
+        return "redirect:/pamong/monitoring#tab_kedisiplinan";
     }
 }

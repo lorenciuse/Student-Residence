@@ -15,7 +15,6 @@
         <link href="${pageContext.request.contextPath}/resources/bootstrap-3.3.4-dist/css/bootstrap.min.cerulean.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/AdminLTE.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/sticky-footer-navbar.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/resources/plugins/css/blue.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-select.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -105,89 +104,161 @@
                             <div id="myTabContent" class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade in active" id="aktivitas" aria-labelledBy="aktivitas-tab">
                                     <h3 class="page-header"><span class="glyphicon glyphicon-list-alt"></span> Catatan Aktivitas Harian</h3>
-                                    <form class="form-inline" role="form" action="aktivitas" method="post">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Tanggal Aktivitas</label>
-                                                    <div class='input-group date' id='datetimepicker2'>
-                                                        <input type="text" class="form-control" name="tanggal_aktivitas" readonly>
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-calendar"></span>
-                                                        </span>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <form class="form-horizontal" role="form" action="aktivitas" method="post">
+                                                <div class="col-sm-12 col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Tanggal Aktivitas</label>
+                                                        <div class='input-group date' id='datetimepicker2'>
+                                                            <input type="text" class="form-control" name="tanggal_aktivitas" readonly>
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary btn-flat">Simpan</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div class="col-sm-12 col-md-offset-1 col-md-5">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Aktivitas</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="bangun" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Bangun Pagi" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="opera_pagi" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Opera Pagi" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="doa_pagi" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Doa Pagi" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="studi" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Studi" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="gebyur_wc" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Gebyur WC" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="doa_malam" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Doa Malam" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input class="minimal" type="checkbox" name="tidur_malam" value="ya">
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Tidur Malam" readonly>
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                                <a class="btn btn-default" id="select-all">Ya</a>
+                                                            </span>
+                                                            <input type="text" class="form-control" value="Semua Terlaksana" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label class="control-label">Aktivitas</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="bangun"> Bangun</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="opera_pagi"> Opera Pagi</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="doa_pagi"> Doa Pagi</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="studi"> Studi</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="gebyur_wc"> Gebyur WC</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="doa_malam"> Doa Malam</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label><input class="minimal form-control" type="checkbox" name="checkboxes" value="tidur_malam"> Tidur Malam</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <a class="btn btn-default btn-sm" id="select-all"> Semua Diikuti</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                <div class="form-group">
-                                                    <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane fade" id="kedisiplinan" aria-labelledBy="kedisiplinan-tab">
                                     <h3 class="page-header"><span class="glyphicon glyphicon-th"></span> Catatan Peringatan Mahasiswa</h3>
-                                    <div class="form-inline">
+                                    <div class="form-horizontal">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12">
                                                 <table class="table table-bordered">
                                                     <tr>
                                                         <th>Lisan</th>
                                                         <td>
+                                                            <input type="hidden" id="total_lisan" value="${lisan}">
                                                             <div class="btn-group" role="group" aria-label="...">
-                                                                <button type="button" class="btn btn-default btn-flat">Lisan 1</button>
-                                                                <button type="button" class="btn btn-default btn-flat">Lisan 2</button>
-                                                                <button type="button" class="btn btn-default btn-flat">Lisan 3</button>
+                                                                <button class="btn btn-default btn-flat" id="l1">Lisan 1</button>
+                                                                <button class="btn btn-default btn-flat" id="l2">Lisan 2</button>
+                                                                <button class="btn btn-default btn-flat" id="l3">Lisan 3</button>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th>Tertulis</th>
                                                         <td>
+                                                            <input type="hidden" id="total_tertulis" value="${tertulis}">
                                                             <div class="btn-group" role="group" aria-label="...">
-                                                                <button type="button" class="btn btn-default btn-flat">SP 1</button>
-                                                                <button type="button" class="btn btn-default btn-flat">SP 2</button>
-                                                                <button type="button" class="btn btn-default btn-flat">SP 3</button>
+                                                                <button class="btn btn-default btn-flat" id="tl1">SP 1</button>
+                                                                <button class="btn btn-default btn-flat" id="tl2">SP 2</button>
+                                                                <button class="btn btn-default btn-flat" id="tl3">SP 3</button>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 </table>
+                                                <div id='keterangan_lisan'>
+                                                    <form role="form" action="kedisiplinan" method="post">
+                                                        <h3 class="page-header text-center"><small>Peringatan Lisan</small></h3>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Tanggal Peringatan</label>
+                                                                <div class='input-group date' id='datetimepicker7'>
+                                                                    <input type="text" class="form-control" name="tanggal_peringatan" readonly>
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-offset-1 col-md-7">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Keterangan</label>
+                                                                <textarea class="form-control" rows="2" name="keterangan"></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" name="jenis_peringatan" value="Lisan">
+                                                    </form>
+                                                </div>
+                                                <div id='keterangan_tertulis'>
+                                                    <form role="form" action="kedisiplinan" method="post">
+                                                        <h3 class="page-header text-center"><small>Peringatan Tertulis</small></h3>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Tanggal Peringatan</label>
+                                                                <div class='input-group date' id='datetimepicker8'>
+                                                                    <input type="text" class="form-control" name="tanggal_peringatan" readonly>
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-offset-1 col-md-7">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Keterangan</label>
+                                                                <textarea class="form-control" rows="2" name="keterangan"></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" name="jenis_peringatan" value="Tertulis">
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -403,22 +474,20 @@
     <script src="${pageContext.request.contextPath}/resources/plugins/js/moment-with-locales.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-datetimepicker.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-select.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/plugins/js/icheck.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-clockpicker.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/pages/js/monitoring.js"></script>
     <script>
+        $(document).ready(function () {
         $('.clockpicker').clockpicker({
             donetext: 'Ya',
             autoclose: true,
             placement: 'top'
         });
-        
-        $(document).ready(function () {
-                <c:choose>
-                    <c:when test = "${selectedk}">
+        <c:choose>
+            <c:when test = "${selectedk}">
                         $('#kamar').selectpicker('val', document.getElementById("kam").value);
-                    </c:when>
-                </c:choose>
+            </c:when>
+        </c:choose>
         <c:choose >
             <c:when test = "${selectedm}">
                 $('#mhs').selectpicker('val', document.getElementById("maha").value);

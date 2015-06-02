@@ -19,16 +19,16 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.web-resources}</file>
-                    <path-in-war>WEB-INF/classes</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${libs.jstl.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
                     <file>${libs.Apache_Commons.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.web-resources}</file>
+                    <path-in-war>WEB-INF/classes</path-in-war>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
@@ -42,7 +42,6 @@
         <spring-data xmlns="http://www.netbeans.org/ns/spring-data/1">
             <config-files>
                 <config-file>web/WEB-INF/dispatcher-servlet.xml</config-file>
-                <config-file>web/WEB-INF/spring-security.xml</config-file>
                 <config-file>web/WEB-INF/spring-database.xml</config-file>
             </config-files>
             <config-file-groups>

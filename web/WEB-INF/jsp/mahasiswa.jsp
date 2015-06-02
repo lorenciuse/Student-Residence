@@ -170,10 +170,10 @@
                                     </div>
                                     <div class="box-body">
                                         <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Tambah Nomor Pendaftaran</h6>
+                                            <h6 class="page-header">Data Mahasiswa</h6>
                                         </div>
                                         <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Daftar Nomor Pendaftaran</h6>
+                                            <canvas id="actChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -460,8 +460,93 @@
         <script src="${pageContext.request.contextPath}/resources/plugins/js/dataTables.responsive.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery.bootstrap-duallistbox.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-select.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/Chart.min.js"></script>
         <script>
+            Chart.defaults.global.responsive = true;
+            var ctx = document.getElementById("actChart").getContext("2d");
             $(document).ready(function () {
+//                var data = {
+//                    labels: ["January", "February", "March", "April", "May", "June", "July"],
+//                    datasets: [
+//                        {
+//                            label: "My First dataset",
+//                            fillColor: "rgba(220,220,220,0.2)",
+//                            strokeColor: "rgba(220,220,220,1)",
+//                            pointColor: "rgba(220,220,220,1)",
+//                            pointStrokeColor: "#fff",
+//                            pointHighlightFill: "#fff",
+//                            pointHighlightStroke: "rgba(220,220,220,1)",
+//                            data: [65, 59, 80, 81, 56, 55, 40]
+//                        },
+//                        {
+//                            label: "My Second dataset",
+//                            fillColor: "rgba(151,187,205,0.2)",
+//                            strokeColor: "rgba(151,187,205,1)",
+//                            pointColor: "rgba(151,187,205,1)",
+//                            pointStrokeColor: "#fff",
+//                            pointHighlightFill: "#fff",
+//                            pointHighlightStroke: "rgba(151,187,205,1)",
+//                            data: [28, 48, 40, 19, 86, 27, 90]
+//                        }
+//                    ]
+//                };
+                var data = [
+                    {
+                        value: 100,
+                        color: "#F7464A",
+                        highlight: "#FF5A5E",
+                        label: "Bangun Pagi"
+                    },
+                    {
+                        value: 90,
+                        color: "#46BFBD",
+                        highlight: "#5AD3D1",
+                        label: "Opera Pagi"
+                    },
+                    {
+                        value: 95,
+                        color: "#FDB45C",
+                        highlight: "#FFC870",
+                        label: "Doa Pagi"
+                    },
+                    {
+                        value: 100,
+                        color: "#949FB1",
+                        highlight: "#A8B3C5",
+                        label: "Studi"
+                    },
+                    {
+                        value: 10,
+                        color: "#4D5360",
+                        highlight: "#616774",
+                        label: "Gebyur WC"
+                    },
+                    {
+                        value: 99,
+                        color: "#4D5360",
+                        highlight: "#616774",
+                        label: "Doa Malam"
+                    },
+                    {
+                        value: 100,
+                        color: "#4D5360",
+                        highlight: "#616774",
+                        label: "Tidur Malam"
+                    }
+
+                ];
+                
+//                var width = $('canvas').parent().width();
+//                $('canvas').attr("width", width);
+                var actChart = new Chart(ctx).PolarArea(data,{
+                    animationEasing :"easeOutBounce"
+                });
+//                window.onresize = function (event) {
+//                    var width = $('canvas').parent().width();
+//                    $('canvas').attr("width", width);
+//                    new Chart(ctx).Line(data);
+//                };
+
                 var nama = $('select[name="nama[]"]').bootstrapDualListbox();
                 $('.selectpicker').selectpicker();
                 $('#no').selectpicker('val', "");

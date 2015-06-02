@@ -5,8 +5,10 @@
  */
 package com.sr.model.dao;
 
+import com.sr.model.Aktivitas;
 import com.sr.model.Inap;
 import com.sr.model.Kamar;
+import com.sr.model.Kedisiplinan;
 import com.sr.model.Keluar;
 import com.sr.model.Pamong;
 import com.sr.model.Pendaftaran;
@@ -37,5 +39,7 @@ public interface IPamongDAO<T> {
     public boolean addMahasiswa(String nim, String id);
     public boolean insertInap(Inap inap, String nim);
     public boolean insertKeluar(Keluar keluar, String nim);
-    public boolean insertActivity();
+    public boolean insertActivity(Aktivitas act, String nim);
+    public boolean insertKedisiplinan(Kedisiplinan kedisiplinan, String nim);
+    public int getJumlahPeringatanByJenis(String jenis, String nim);
 }
