@@ -157,7 +157,7 @@ $(function () {
 
 //script untuk menghapus field kegiatan kampus dan luar kampus
 function removeElement(parentDiv, childDiv) {
-    if (childDiv == parentDiv) {
+    if (childDiv === parentDiv) {
         alert("The parent div cannot be removed.");
     }
     else if (document.getElementById(childDiv)) {
@@ -173,42 +173,7 @@ function removeElement(parentDiv, childDiv) {
 
 //script untuk validasi field
 $(document).ready(function () {
-    $('#formBiodata').bootstrapValidator({
-        container: '#messages',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            //                                                nama_lengkap: {
-            //                                                    validators: {
-            //                                                        notEmpty: {
-            //                                                            message: 'Nama lengkap harus di isi'
-            //                                                        }
-            //                                                    }
-            //                                                },
-            //                                                tempat_lahir: {
-            //                                                    validators: {
-            //                                                        notEmpty: {
-            //                                                            message: 'Tempat lahir harus di isi'
-            //                                                        }
-            //                                                    }
-            //                                                },
-            //                                                tanggal_lahir: {
-            //                                                    validators: {
-            //                                                        notEmpty: {
-            //                                                            message: 'Tanggal lahir harus di isi'
-            //                                                        }
-            //                                                    }
-            //                                                },
-            //                                                kelamin: {
-            //                                                    validators: {
-            //                                                        notEmpty: {
-            //                                                            message: 'Pilih salah satu'
-            //                                                        }
-            //                                                    }
-            //                                                }
-        }
+    $('#simpan').click(function (event) {
+        $('#formBiodata').preventDefault().smkValidate();
     });
 });

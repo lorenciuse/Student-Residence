@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
-    
+
     private final String GET_LIST_NAMA = "SELECT NAMA_MHS FROM MAHASISWA WHERE NAMA_MHS IS NOT NULL";
     private final String GET_NIM_BY_NAMA = "SELECT NIM FROM MAHASISWA WHERE NAMA_MHS = ?";
     private final String GET_LIST_NAMA_NOT_IN_KAMAR = "SELECT NAMA_MHS FROM MAHASISWA WHERE NIM NOT IN (SELECT NIM FROM RESIDENCE WHERE NIM IS NOT NULL) AND NAMA_MHS IS NOT NULL";
@@ -50,7 +50,7 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
     private final String GET_FOTO_MAHASISWA_BY_NIM = "SELECT FOTO_MHS FROM MAHASISWA WHERE NIM = ?";
     private final String INSERT_PRESTASI = "INSERT INTO PRESTASI_MHS (NO_SERTIFIKAT, NIM, NAMA_PRESTASI, JENIS_PRESTASI) VALUES(?,?,?,?)";
     private final String GET_PRESTASI = "SELECT NO_SERTIFIKAT, NAMA_PRESTASI FROM PRESTASI_MHS WHERE (NIM = ? AND JENIS_PRESTASI = ?)";
- 
+
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -61,7 +61,7 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
-    
+
     @Override
     public boolean validateLogin(String nomor) {
         return findNomor(nomor);
@@ -107,10 +107,11 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
                 mhs.getAgama(), mhs.getKelamin(), mhs.getAlamat_asal(), mhs.getKab_kota_asal(), mhs.getProv_asal(),
                 mhs.getNo_hp_mhs(), mhs.getNama_ayah(), mhs.getNama_ibu(), mhs.getPendidikan_ayah(), mhs.getPendidikan_ibu(),
                 mhs.getPekerjaan_ayah(), mhs.getPekerjaan_ibu(), mhs.getPendapatan_ortu(), mhs.getNo_tel_ortu(),
-                mhs.getNo_hp_ortu(), mhs.getAlamat_keluarga(), mhs.getNo_tel_keluarga(), mhs.getNo_hp_keluarga(), new SqlLobValue(foto.getInputStream(), (int) foto.getSize(), lobHandler), mhs.getNim()}, 
+                mhs.getNo_hp_ortu(), mhs.getAlamat_keluarga(), mhs.getNo_tel_keluarga(), mhs.getNo_hp_keluarga(), new SqlLobValue(foto.getInputStream(), (int) foto.getSize(), lobHandler), mhs.getNim()},
                     new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-                    Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.NUMERIC, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.BLOB, Types.VARCHAR});
-            getJdbcTemplate().update(INSERT_AKADEMIK, new Object[]{aka.getProdi(), aka.getIpk_masuk(), aka.getSemester(), aka.getRapor_smu(), aka.getJurusan(), aka.getFakultas(), aka.getNim()});
+                        Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.NUMERIC, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.BLOB, Types.VARCHAR});
+            getJdbcTemplate().update(INSERT_AKADEMIK, new Object[]{aka.getProdi(), aka.getIpk_masuk(), aka.getSemester(), aka.getRapor_smu(), aka.getJurusan(), aka.getFakultas(), aka.getNim()},
+                    new int[]{Types.VARCHAR, Types.DECIMAL, Types.NUMERIC, Types.DECIMAL, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
             for (Prestasi pres : prestasi) {
                 getJdbcTemplate().update(INSERT_PRESTASI, new Object[]{pres.getNo_sertifikat(), pres.getNim(), pres.getNama_prestasi(), pres.getJenis_prestasi()});
             }
@@ -132,8 +133,13 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
 
     @Override
     public Mahasiswa getBiodataByNim(String nim) {
-        Mahasiswa mahasiswa = (Mahasiswa) getJdbcTemplate().queryForObject(
-                GET_BIODATA, new Object[]{nim}, new MahasiswaRowMapper());
+        Mahasiswa mahasiswa = null;
+        try {
+            mahasiswa = (Mahasiswa) getJdbcTemplate().queryForObject(
+                    GET_BIODATA, new Object[]{nim}, new MahasiswaRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
         return mahasiswa;
     }
 
@@ -166,14 +172,19 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
             return mahasiswa;
         }
     }
-    
+
     @Override
     public AkademikSR getAkademikByNim(String nim) {
-        AkademikSR asr = (AkademikSR) getJdbcTemplate().queryForObject(
-                GET_AKADEMIK, new Object[]{nim}, new AkademikSRRowMapper());
+        AkademikSR asr = null;
+        try {
+            asr = (AkademikSR) getJdbcTemplate().queryForObject(
+                    GET_AKADEMIK, new Object[]{nim}, new AkademikSRRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
         return asr;
     }
-    
+
     public class AkademikSRRowMapper implements RowMapper {
 
         @Override
@@ -196,7 +207,7 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
                 GET_PRESTASI, new Object[]{nim, jenis}, new PrestasiRowMapper());
         return prestasi;
     }
-    
+
     public class PrestasiRowMapper implements RowMapper {
 
         @Override
@@ -218,7 +229,7 @@ public class IMahasiswaDAOImpl implements IMahasiswaDAO<Mahasiswa> {
             return null;
         }
     }
-    
+
     public class FotoMahasiswaRowMapper implements ParameterizedRowMapper<Blob> {
 
         @Override

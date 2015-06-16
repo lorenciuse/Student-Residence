@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@include file="session_checker.jspf" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -111,14 +112,14 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Tanggal Aktivitas</label>
                                                         <div class='input-group date' id='datetimepicker2'>
-                                                            <input type="text" class="form-control" name="tanggal_aktivitas" readonly>
+                                                            <input type="text" class="form-control" name="tanggal_aktivitas" readonly required>
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <button class="btn btn-primary btn-flat">Simpan</button>
+                                                        <button id="btnaktiv" class="btn btn-primary btn-flat">Simpan</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-offset-1 col-md-5">
@@ -126,7 +127,7 @@
                                                         <label class="control-label">Aktivitas</label>
                                                         <div class="input-group">
                                                             <span class="input-group-addon">
-                                                                <input class="minimal" type="checkbox" name="bangun" value="ya">
+                                                                <input class="minimal" type="checkbox" name="bangun" value="ya" required>
                                                             </span>
                                                             <input type="text" class="form-control" value="Bangun Pagi" readonly>
                                                         </div>
@@ -214,7 +215,7 @@
                                                             <div class="form-group">
                                                                 <label class="control-label">Tanggal Peringatan</label>
                                                                 <div class='input-group date' id='datetimepicker7'>
-                                                                    <input type="text" class="form-control" name="tanggal_peringatan" readonly>
+                                                                    <input type="text" class="form-control" name="tanggal_peringatan" id="tanggal_peringatan" readonly required>
                                                                     <span class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
@@ -224,10 +225,10 @@
                                                         <div class="col-md-offset-1 col-md-7">
                                                             <div class="form-group">
                                                                 <label class="control-label">Keterangan</label>
-                                                                <textarea class="form-control" rows="2" name="keterangan"></textarea>
+                                                                <textarea class="form-control" rows="2" name="keterangan" required></textarea>
                                                             </div>
                                                             <div class="form-group">
-                                                                <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
+                                                                <input type="submit" id="btnlisan" onclick="log()" class="btn btn-primary btn-flat" value="Simpan">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" name="jenis_peringatan" value="Lisan">
@@ -240,7 +241,7 @@
                                                             <div class="form-group">
                                                                 <label class="control-label">Tanggal Peringatan</label>
                                                                 <div class='input-group date' id='datetimepicker8'>
-                                                                    <input type="text" class="form-control" name="tanggal_peringatan" readonly>
+                                                                    <input type="text" class="form-control" name="tanggal_peringatan" readonly required>
                                                                     <span class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
@@ -250,10 +251,10 @@
                                                         <div class="col-md-offset-1 col-md-7">
                                                             <div class="form-group">
                                                                 <label class="control-label">Keterangan</label>
-                                                                <textarea class="form-control" rows="2" name="keterangan"></textarea>
+                                                                <textarea class="form-control" rows="2" name="keterangan" required></textarea>
                                                             </div>
                                                             <div class="form-group">
-                                                                <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
+                                                                <input type="submit" id="btntertulis" class="btn btn-primary btn-flat" value="Simpan">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" name="jenis_peringatan" value="Tertulis">
@@ -272,7 +273,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Tanggal Sakit</label>
                                                         <div class='input-group date' id='datetimepicker3'>
-                                                            <input type="text" class="form-control" name="tanggal_sakit" readonly>
+                                                            <input type="text" class="form-control" name="tanggal_sakit" readonly required>
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-calendar"></span>
                                                             </span>
@@ -284,7 +285,7 @@
                                                         <label class="control-label">Nama Penyakit</label>
                                                         <div id="parentpenyakit">
                                                             <div class="input-group" style="margin-bottom: 1em" id="childpenyakit">
-                                                                <input type="text" class="form-control" name="namapenyakit" placeholder="Masukkan nama penyakit">
+                                                                <input type="text" class="form-control" name="namapenyakit" placeholder="Masukkan nama penyakit" required>
                                                                 <a class="input-group-addon btn btn-default" id="addbtn"><span class="glyphicon glyphicon-plus"></span></a>
                                                             </div>
                                                         </div>
@@ -292,7 +293,7 @@
                                                 </div>
                                                 <div class="col-md-1">
                                                     <div class="form-group">
-                                                        <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
+                                                        <input type="submit" id="btnsehat" class="btn btn-primary btn-flat" value="Simpan">
                                                     </div>
                                                 </div>
                                             </form>
@@ -335,21 +336,21 @@
                                         <!--TODO: ambil NIM dari session-->
                                         <label for="nama_dituju" class="col-sm-2 col-md-2 control-label">Nama Dituju</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="text" class="form-control" name="nama_dituju">
+                                            <input type="text" class="form-control" name="nama_dituju" required>
                                         </div>
                                         <label for="nomor_telp" class="col-sm-2 col-md-2 control-label">Nomor Telepon</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <input type="text" class="form-control" name="nomor_telepon_dituju">
+                                            <input type="text" class="form-control" name="nomor_telepon_dituju" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="alamat_inap" class="col-sm-2 col-md-2 control-label">Alamat Inap</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <textarea rows="2" class="form-control" name="alamat_inap"></textarea>
+                                            <textarea rows="2" class="form-control" name="alamat_inap" required></textarea>
                                         </div>
                                         <label for="keperluan_inap" class="col-sm-2 col-md-2 control-label">Keperluan Inap</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <textarea rows="2" class="form-control" name="keperluan_inap"></textarea>
+                                            <textarea rows="2" class="form-control" name="keperluan_inap" required></textarea>
                                         </div>
                                     </div> 
                                     <h3 class="page-header text-center"><small>Waktu</small></h3>
@@ -357,7 +358,7 @@
                                         <label for="tanggal_berangkat" class="col-sm-2 col-md-2 control-label">Tanggal Berangkat</label>
                                         <div class="col-sm-4 col-md-4">
                                             <div class='input-group date' id='datetimepicker4'>
-                                                <input type="text" class="form-control" name="tanggal_berangkat" id='tanggal_berangkat' readonly>
+                                                <input type="text" class="form-control" name="tanggal_berangkat" id='tanggal_berangkat' readonly required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -366,7 +367,7 @@
                                         <label for="tanggal_kembali" class="col-sm-2 col-md-2 control-label">Tanggal Kembali</label>
                                         <div class="col-sm-4 col-md-4">
                                             <div class='input-group date' id='datetimepicker5'>
-                                                <input type="text" class="form-control" name="tanggal_kembali" id='tanggal_kembali' readonly>
+                                                <input type="text" class="form-control" name="tanggal_kembali" id='tanggal_kembali' readonly required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -377,7 +378,7 @@
                                         <label for="jam_berangkat" class="col-sm-2 col-md-2 control-label">Jam Berangkat</label>
                                         <div class="col-sm-4 col-md-4">
                                             <div class="input-group clockpicker">
-                                                <input id="jam_berangkat" name="jam_berangkat" type="text" class="form-control" readonly onchange="transform('jam_berangkat', 'jam_brkt')">
+                                                <input id="jam_berangkat" name="jam_berangkat" type="text" class="form-control" readonly onchange="transform('jam_berangkat', 'jam_brkt')" required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-time"></span>
                                                 </span>
@@ -387,7 +388,7 @@
                                         <label for="jam_kembali" class="col-sm-2 col-md-2 control-label">Jam Kembali</label>
                                         <div class="col-sm-4 col-md-4">
                                             <div class="input-group clockpicker">
-                                                <input id="jam_kembali" name="jam_kembali" type="text" class="form-control" readonly onchange="transform('jam_kembali', 'jam_kbl')">
+                                                <input id="jam_kembali" name="jam_kembali" type="text" class="form-control" readonly onchange="transform('jam_kembali', 'jam_kbl')" required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-time"></span>
                                                 </span>
@@ -398,7 +399,7 @@
                                     <div class="form-group">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-1">
-                                            <button type="submit" class="btn btn-primary btn-flat">
+                                            <button type="submit" id="btninap" class="btn btn-primary btn-flat">
                                                 Izinkan Menginap
                                             </button>
                                         </div>
@@ -409,18 +410,18 @@
                                     <div class="form-group">
                                         <label for="alamat_keluar" class="col-sm-2 col-md-2 control-label">Alamat Keluar</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <textarea rows="2" class="form-control" name="alamat_keluar"></textarea>
+                                            <textarea rows="2" class="form-control" name="alamat_keluar" required></textarea>
                                         </div>
                                         <label for="keperluan_keluar" class="col-sm-2 col-md-2 control-label">Keperluan Keluar</label>
                                         <div class="col-sm-4 col-md-4">
-                                            <textarea rows="2" class="form-control" name="keperluan_keluar"></textarea>
+                                            <textarea rows="2" class="form-control" name="keperluan_keluar" required></textarea>
                                         </div>
                                     </div> 
                                     <div class="form-group">
                                         <label for="tanggal_keluar" class="col-sm-2 col-md-2 control-label">Hari/Tanggal</label>
                                         <div class=" col-sm-4 col-md-4">
                                             <div class='input-group date' id='datetimepicker6'>
-                                                <input type="text" class="form-control" name="tanggal_keluar" id='tanggal_keluar' readonly>
+                                                <input type="text" class="form-control" name="tanggal_keluar" id='tanggal_keluar' readonly required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -431,7 +432,7 @@
                                         <label for="jam_keluar" class="col-sm-2 col-md-2 control-label">Jam Keluar</label>
                                         <div class="col-sm-4 col-md-4">
                                             <div class="input-group clockpicker">
-                                                <input id="jam_keluar" name="jam_keluar" type="text" class="form-control" readonly onchange="transform('jam_keluar', 'jamKeluar')">
+                                                <input id="jam_keluar" name="jam_keluar" type="text" class="form-control" readonly onchange="transform('jam_keluar', 'jamKeluar')" required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-time"></span>
                                                 </span>
@@ -441,7 +442,7 @@
                                         <label for="jam_kembali" class="col-sm-2 col-md-2 control-label">Jam Kembali</label>
                                         <div class="col-sm-4 col-md-4">
                                             <div class="input-group clockpicker">
-                                                <input id="jam_kmbli" name="jam_kmbli" type="text" class="form-control" readonly onchange="transform('jam_kmbli', 'jamKembali')">
+                                                <input id="jam_kmbli" name="jam_kmbli" type="text" class="form-control" readonly onchange="transform('jam_kmbli', 'jamKembali')" required>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-time"></span>
                                                 </span>
@@ -452,7 +453,7 @@
                                     <div class="form-group">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-1">
-                                            <button type="submit" class="btn btn-primary btn-flat">
+                                            <button type="submit" id="btnkeluar" class="btn btn-primary btn-flat">
                                                 Izinkan Keluar
                                             </button>
                                         </div>
@@ -478,6 +479,17 @@
     <script src="${pageContext.request.contextPath}/resources/pages/js/monitoring.js"></script>
     <script>
         $(document).ready(function () {
+            var btnid = ["btnaktiv", "btnlisan", "btntertulis", "btnsehat", "btninap", "btnkeluar"];
+            for (var i = 0; i < btnid.length; i++) {
+                $(document.getElementById(btnid[i])).addClass("disabled");
+}
+
+        <c:if test="${nim!=null}">
+             for (var i = 0; i < btnid.length; i++) {
+                $(document.getElementById(btnid[i])).removeClass("disabled");
+}   
+        </c:if>
+        
         $('.clockpicker').clockpicker({
             donetext: 'Ya',
             autoclose: true,

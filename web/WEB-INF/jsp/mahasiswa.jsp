@@ -8,6 +8,7 @@
 <%@page import="org.springframework.beans.factory.annotation.Autowired"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@include file="session_checker.jspf" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -65,11 +66,11 @@
                                                 <input type="hidden" name="idPamong" value="${idPamong}">
                                                 <div class="col-sm-6 col-md-6">
                                                     <label class="control-label">Nomor Pendaftaran</label>
-                                                    <input type="text" class="form-control" name="nomor_pendaftaran">
+                                                    <input type="text" class="form-control" name="nomor_pendaftaran" required>
                                                 </div>
                                                 <div class="col-sm-6 col-md-6">
                                                     <label class="control-label">NIM</label>
-                                                    <input type="text" class="form-control" name="nim">
+                                                    <input type="text" class="form-control" name="nim" required>
                                                 </div>
                                                 <div class="col-sm-1 col-md-1" style="margin-top: 1em">
                                                     <input type="submit" class="btn btn-primary btn-flat" value="Simpan">
@@ -169,10 +170,83 @@
                                         <h3 class="box-title"><b>Daftar Rekap Aktivitas Mahasiswa</b></h3>
                                     </div>
                                     <div class="box-body">
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Data Mahasiswa</h6>
+                                        <div class="col-sm-7 col-md-7">
+                                            <div class="row">
+                                                <div class="col-sm-5 col-md-5">
+                                                    <form class="form-horizontal form-group"role="form" action="aktivitasrep" method="post">
+                                                        <label class="control-label">NIM Mahasiswa</label>
+                                                        <div class="input-group">
+                                                            <input type="text" name="nim" class="form-control" value="${nimarep}" required>
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            </span>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-sm-5 col-md-offset-1 col-md-5">
+                                                    <i>Keterangan :<br> A = Amat Baik, B = Baik,<br> C = Cukup, D = Kurang, E = Buruk</i>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-5 col-md-5">
+                                                    <table class="panel-body table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><strong>Nama</strong></td>
+                                                                <td>${arepnama}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>NIM</strong></td>
+                                                                <td>${nimarep}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Prodi</strong></td>
+                                                                <td>${arepprodi}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Fakultas</strong></td>
+                                                                <td>${arepfakultas}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-sm-5 col-md-offset-1 col-md-5">
+                                                    <table class="panel-body table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><strong>Bangun Pagi</strong></td>
+                                                                <td id="vbangun"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Opera Pagi</strong></td>
+                                                                <td id="vopera"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Doa Pagi</strong></td>
+                                                                <td id="vdoapagi"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Studi</strong></td>
+                                                                <td id="vstudi"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Gebyur WC</strong></td>
+                                                                <td id="vgebyur"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Doa Malam</strong></td>
+                                                                <td id="vdoamalam"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Tidur Malam</strong></td>
+                                                                <td id="vtidur"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-6 col-md-6">
+                                        <div class="col-sm-5 col-md-5">
                                             <canvas id="actChart"></canvas>
                                         </div>
                                     </div>
@@ -186,7 +260,7 @@
                                             <form class="form-horizontal"role="form" action="biodata" method="post">
                                                 <label class="control-label">NIM Mahasiswa</label>
                                                 <div class="input-group">
-                                                    <input type="text" name="nim" class="form-control" value="${nim}">
+                                                    <input type="text" name="nim" class="form-control" value="${nim}" required>
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                                     </span>
@@ -399,11 +473,51 @@
                                         <h3 class="box-title"><b>Daftar Rekap Kedisiplinan Mahasiswa</b></h3>
                                     </div>
                                     <div class="box-body">
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Tambah Nomor Pendaftaran</h6>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Daftar Nomor Pendaftaran</h6>
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="row">
+                                                <div class="col-sm-3 col-md-3">
+                                                    <form class="form-horizontal form-group"role="form" action="kedisiplinanrep" method="post">
+                                                        <label class="control-label">NIM Mahasiswa</label>
+                                                        <div class="input-group">
+                                                            <input type="text" name="nim" class="form-control" value="${nimkrep}"required>
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            </span>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-3 col-md-3">
+                                                    <table class="panel-body table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><strong>Nama</strong></td>
+                                                                <td>${krepnama}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>NIM</strong></td>
+                                                                <td>${nimkrep}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Prodi</strong></td>
+                                                                <td>${krepprodi}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Fakultas</strong></td>
+                                                                <td>${krepfakultas}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-sm-3 col-md-3 text-center">
+                                                    <h3 class="box-title">Peringatan Terakhir</h3>
+                                                    <label class="page-header">${krepdis.getJenis()} ${krepcount}</label>
+                                                </div>  
+                                                <div class="col-sm-5 col-md-5">
+                                                    <canvas id="disiplinChart"></canvas>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -437,11 +551,61 @@
                                         <h3 class="box-title"><b>Daftar Rekap Perizinan Mahasiswa</b></h3>
                                     </div>
                                     <div class="box-body">
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Tambah Nomor Pendaftaran</h6>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Daftar Nomor Pendaftaran</h6>
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-md-6">
+                                                    <form class="form-horizontal"role="form" action="perizinanrep" method="post">
+                                                        <label class="control-label">NIM Mahasiswa</label>
+                                                        <div class="input-group">
+                                                            <input type="text" name="nim" class="form-control" value="${nimprep}" required>
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                            </span>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6 col-md-6">
+                                                    <table class="panel-body table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><strong>Nama</strong></td>
+                                                                <td>${prepnama}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>NIM</strong></td>
+                                                                <td>${nimprep}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Prodi</strong></td>
+                                                                <td>${prepprodi}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Fakultas</strong></td>
+                                                                <td>${prepfakultas}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-sm-3 col-md-3">
+                                                    <table class="panel-body table table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><strong>Jumlah Izin Keluar</strong></td>
+                                                                <td>${keluar}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Jumlah Izin Inap</strong></td>
+                                                                <td>${inap}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-sm-3 col-md-3">
+                                                    <canvas id="pChart"></canvas>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -462,92 +626,141 @@
         <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-select.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/Chart.min.js"></script>
         <script>
-            Chart.defaults.global.responsive = true;
-            var ctx = document.getElementById("actChart").getContext("2d");
             $(document).ready(function () {
-//                var data = {
-//                    labels: ["January", "February", "March", "April", "May", "June", "July"],
-//                    datasets: [
-//                        {
-//                            label: "My First dataset",
-//                            fillColor: "rgba(220,220,220,0.2)",
-//                            strokeColor: "rgba(220,220,220,1)",
-//                            pointColor: "rgba(220,220,220,1)",
-//                            pointStrokeColor: "#fff",
-//                            pointHighlightFill: "#fff",
-//                            pointHighlightStroke: "rgba(220,220,220,1)",
-//                            data: [65, 59, 80, 81, 56, 55, 40]
-//                        },
-//                        {
-//                            label: "My Second dataset",
-//                            fillColor: "rgba(151,187,205,0.2)",
-//                            strokeColor: "rgba(151,187,205,1)",
-//                            pointColor: "rgba(151,187,205,1)",
-//                            pointStrokeColor: "#fff",
-//                            pointHighlightFill: "#fff",
-//                            pointHighlightStroke: "rgba(151,187,205,1)",
-//                            data: [28, 48, 40, 19, 86, 27, 90]
-//                        }
-//                    ]
-//                };
+                Chart.defaults.global.responsive = true;
+                var ctx = document.getElementById("actChart").getContext("2d");
+                var ctx2 = document.getElementById("pChart").getContext("2d");
+                var ctx3 = document.getElementById("disiplinChart").getContext("2d");
+            <c:if test="${achart != null}">
                 var data = [
                     {
-                        value: 100,
+                        value: <c:out value="${achart.getBangun_pagi()}"></c:out>,
                         color: "#F7464A",
                         highlight: "#FF5A5E",
                         label: "Bangun Pagi"
                     },
                     {
-                        value: 90,
+                        value: <c:out value="${achart.getOpera_pagi()}"></c:out>,
                         color: "#46BFBD",
                         highlight: "#5AD3D1",
                         label: "Opera Pagi"
                     },
                     {
-                        value: 95,
+                        value: <c:out value="${achart.getDoa_pagi()}"></c:out>,
                         color: "#FDB45C",
                         highlight: "#FFC870",
                         label: "Doa Pagi"
                     },
                     {
-                        value: 100,
+                        value: <c:out value="${achart.getStudi()}"></c:out>,
                         color: "#949FB1",
                         highlight: "#A8B3C5",
                         label: "Studi"
                     },
                     {
-                        value: 10,
+                        value: <c:out value="${achart.getGebyur_wc()}"></c:out>,
                         color: "#4D5360",
                         highlight: "#616774",
                         label: "Gebyur WC"
                     },
                     {
-                        value: 99,
+                        value: <c:out value="${achart.getDoa_malam()}"></c:out>,
                         color: "#4D5360",
                         highlight: "#616774",
                         label: "Doa Malam"
                     },
                     {
-                        value: 100,
+                        value: <c:out value="${achart.getTidur_malam()}"></c:out>,
                         color: "#4D5360",
                         highlight: "#616774",
                         label: "Tidur Malam"
                     }
 
                 ];
-                
-//                var width = $('canvas').parent().width();
-//                $('canvas').attr("width", width);
-                var actChart = new Chart(ctx).PolarArea(data,{
-                    animationEasing :"easeOutBounce"
+                new Chart(ctx).PolarArea(data, {
+                    animationEasing: "easeOutBounce"
                 });
-//                window.onresize = function (event) {
-//                    var width = $('canvas').parent().width();
-//                    $('canvas').attr("width", width);
-//                    new Chart(ctx).Line(data);
-//                };
+            </c:if>
 
-                var nama = $('select[name="nama[]"]').bootstrapDualListbox();
+            <c:if test="${inap != null}">
+                var data1 = [
+                    {
+                        value: <c:out value="${inap}"></c:out>,
+                        color: "#F7464A",
+                        highlight: "#FF5A5E",
+                        label: "Izin Inap"
+                    },
+                    {
+                        value: <c:out value="${keluar}"></c:out>,
+                        color: "#46BFBD",
+                        highlight: "#5AD3D1",
+                        label: "Izin Keluar"
+                    }
+                ];
+                new Chart(ctx2).PolarArea(data1, {
+                    animationEasing: "easeOutBounce"
+                });
+            </c:if>
+            <c:if test="${krepcountp!=null}">
+                var labelp = ["Lisan 1", "Lisan 2", "Lisan 3", "Tertulis 1", "Tertulis 2", "Tertulis 3"];
+                var valp = [6, 5, 4, 3, 2, 1];
+                var lab = [], val = [];
+                for (var i = 0; i < <c:out value="${krepcountp}"></c:out>; i++) {
+                    lab[i] = labelp[i];
+                    val[i] = valp[i];
+                }
+                console.log(val);
+                var data2 = {
+                    labels: lab,
+                    datasets: [
+                        {
+                            label: "Rekam Peringatan",
+                            fillColor: "rgba(220,220,220,0.2)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            pointColor: "rgba(220,220,220,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(220,220,220,1)",
+                            data: val
+                        }
+                    ]
+                };
+
+                new Chart(ctx3).Line(data2, {
+                    animationEasing: "easeOutBounce"
+                });
+                </c:if>
+                var poin = [<c:out value="${achart.getBangun_pagi()}"></c:out>,<c:out value="${achart.getOpera_pagi()}"></c:out>,
+            <c:out value="${achart.getDoa_pagi()}"></c:out>,<c:out value="${achart.getStudi()}"></c:out>,
+            <c:out value="${achart.getGebyur_wc()}"></c:out>,<c:out value="${achart.getDoa_malam()}"></c:out>,
+            <c:out value="${achart.getTidur_malam()}"></c:out>];
+
+                var elemen = ["#vbangun", "#vopera", "#vdoapagi", "#vstudi", "#vgebyur", "#vdoamalam", "#vtidur"], i;
+
+                for (i = 0; i < elemen.length; i++) {
+                    $(elemen[i]).append((convert(poin[i])));
+                    console.log(convert(poin[i]));
+                }
+
+                function convert(poin) {
+                    if (poin > 80) {
+                        return "A";
+                    }
+                    else if (poin > 60 && poin <= 80) {
+                        return "B";
+                    }
+                    else if (poin > 40 && poin <= 60) {
+                        return "C";
+                    }
+                    else if (poin > 20 && poin <= 40) {
+                        return "D";
+                    }
+                    else if (poin <= 20) {
+                        return "E";
+                    }
+                }
+
+                $('select[name="nama[]"]').bootstrapDualListbox();
                 $('.selectpicker').selectpicker();
                 $('#no').selectpicker('val', "");
                 $('#myTable').dataTable({

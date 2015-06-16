@@ -165,7 +165,7 @@ public class MahasiswaController {
     public void lihatfoto(@RequestParam("nim") String nim, HttpServletRequest request, HttpServletResponse response) {
         try {
             Blob blob = mhs.getFotoByNim(nim);
-            response.setContentType("image/jpeg");
+            response.setContentType("image/jpg");
             response.setContentLength((int) blob.length());
             InputStream inputStream = blob.getBinaryStream();
             OutputStream os = response.getOutputStream();

@@ -39,6 +39,10 @@ $(function () {
     });
 });
 
+function log(){
+    console.log(document.getElementById("tanggal_peringatan").value);
+}
+
 //script untuk menghapus field kegiatan kampus dan luar kampus
 function removeElement(parentDiv, childDiv) {
     if (childDiv === parentDiv) {
@@ -107,7 +111,6 @@ $(document).ready(function () {
     var butttertulis = ['#tl1', '#tl2', '#tl3'], l;
     var count_tertulis = document.getElementById("total_tertulis").value;
     for (l = 0; l < count_tertulis; l++)$(butttertulis[l]).addClass("disabled");
-    console.log(count_lisan);
 });
 
 // Javascript to enable link to tab

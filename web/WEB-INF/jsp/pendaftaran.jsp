@@ -14,7 +14,7 @@
         <link href="${pageContext.request.contextPath}/resources/images/Monevs.png" rel="icon" type="image/png">
         <link href="${pageContext.request.contextPath}/resources/bootstrap-3.3.4-dist/css/bootstrap.min.cerulean.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/AdminLTE.min.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrapValidator.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resources/plugins/css/smoke.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/sticky-footer-navbar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/back-to-top.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
@@ -70,19 +70,19 @@
                             <label for="foto" class="col-sm-4 col-md-4 control-label">Foto</label>
                             <div class="col-sm-8 col-md-8">
                                 <img class="thumbnail" src="" id="preview" style="width: 100px; height: auto; display: none">
-                                <input type="file" name="foto" id="foto">
+                                <input type="file" name="foto" id="foto" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="nama_lengkap" class="col-sm-4 col-md-4 control-label">Nama Lengkap</label>
                             <div class="col-sm-8 col-md-8">
-                                <input type="text" class="form-control" name="nama_lengkap" id="nl">
+                                <input type="text" class="form-control" name="nama_lengkap" id="nl" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="tempat_lahir" class="col-sm-4 col-md-4 control-label">Tempat, tanggal lahir</label>
                             <div class="col-sm-4 col-md-4">
-                                <input type="text" class="form-control" name="tempat_lahir" id="tl" placeholder="Tempat Lahir">
+                                <input type="text" class="form-control" name="tempat_lahir" id="tl" placeholder="Tempat Lahir" required>
                             </div>
                             <div class=" col-sm-4 col-md-4">
                                 <div class='input-group date' id='datetimepicker2'>
@@ -96,7 +96,7 @@
                         <div class="form-group">
                             <label for="agama" class="col-sm-4 col-md-4 control-label">Agama</label>
                             <div class="col-sm-4 col-md-4">
-                                <select name="agama" class="form-control" id="ag">
+                                <select name="agama" class="form-control" id="ag" required>
                                     <option value=""></option>
                                     <option value="Buddha">Buddha</option>
                                     <option value="Hindu">Hindu</option>
@@ -110,7 +110,7 @@
                             <div class="col-sm-2 col-md-2">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="kelamin" value="Pria" id="pria">
+                                        <input type="radio" name="kelamin" value="Pria" id="pria" required>
                                         Pria
                                     </label>
                                 </div>
@@ -125,31 +125,31 @@
                         <div class="form-group">
                             <label for="alamat_asal" class="col-sm-4 col-md-4 control-label">Alamat Asal</label>
                             <div class="col-sm-8 col-md-8">
-                                <textarea class="form-control" name="alamat_asal" rows="3" id="asl"></textarea>
+                                <textarea class="form-control" name="alamat_asal" rows="3" id="asl" required></textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="kabupaten_kota" class="col-sm-4 col-md-4 control-label">Kabupaten/Kota & Provinsi</label>
                             <div class="col-sm-4 col-md-4">
-                                <input type="text" class="form-control" name="kabupaten_kota" id="kab" placeholder="Kabupaten/Kota">
+                                <input type="text" class="form-control" name="kabupaten_kota" id="kab" placeholder="Kabupaten/Kota" required>
                             </div>
                             <div class="col-sm-4 col-md-4">
-                                <input type="text" class="form-control" name="provinsi" id="prov" placeholder="Provinsi">
+                                <input type="text" class="form-control" name="provinsi" id="prov" placeholder="Provinsi" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 col-md-4 control-label">Nomor Telepon</label>
                             <div class="col-sm-4 col-md-4">
-                                <input type="text" class="form-control" name="hp" id="nomhs" placeholder="HP" onkeypress='validate(event)'>
+                                <input type="text" class="form-control" name="hp" id="nomhs" placeholder="HP" onkeypress='validate(event)' required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 col-md-4 control-label">Nama Orangtua</label>
                             <div class="col-sm-8 col-md-8">
                                 <label for="nama_ayah" class="control-label">Ayah</label>
-                                <input type="text" class="form-control" name="nama_ayah" id="nayah">
+                                <input type="text" class="form-control" name="nama_ayah" id="nayah" required>
                                 <label for="nama_ibu" class="control-label">Ibu</label>
-                                <input type="text" class="form-control" name="nama_ibu" id="nibu">
+                                <input type="text" class="form-control" name="nama_ibu" id="nibu" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -179,7 +179,7 @@
                             <div class="col-sm-8 col-md-8">
                                 <div class="input-group">
                                     <span class="input-group-addon">Rp</span>
-                                    <input type="text" class="form-control" name="pendapatan_ortu" onkeypress='validate(event)' id="pend">
+                                    <input type="text" class="form-control" name="pendapatan_ortu" onkeypress='validate(event)' id="pend" smk-type="currency" required>
                                     <span class="input-group-addon">,00</span>
                                 </div>
                             </div>
@@ -285,7 +285,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-md-offset-4 col-sm-2 col-md-2">
-                                <input type="submit" class="btn btn-default" value="Simpan">
+                                <input type="submit" class="btn btn-default" value="Simpan" id="simpan">
                             </div>
                         </div>
                     </form>
@@ -458,8 +458,8 @@
         <a href="#" class="back-to-top"><span class="glyphicon glyphicon-arrow-up"></span>&nbsp;&nbsp;Kembali ke Atas</a>
         <%@include file="footer.jsp"%>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/jquery-2.1.3.min.js"></script>
-        <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrapValidator.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/plugins/js/smoke.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/moment-with-locales.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-datetimepicker.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/pages/js/pendaftaran.js"></script>

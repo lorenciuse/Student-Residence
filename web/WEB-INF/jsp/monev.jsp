@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@include file="session_checker.jspf" %>
 <!DOCTYPE html>
 <html>
     <head>

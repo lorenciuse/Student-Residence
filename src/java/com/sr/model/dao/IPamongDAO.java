@@ -5,6 +5,7 @@
  */
 package com.sr.model.dao;
 
+import com.sr.model.Akademik;
 import com.sr.model.Aktivitas;
 import com.sr.model.Inap;
 import com.sr.model.Kamar;
@@ -42,4 +43,15 @@ public interface IPamongDAO<T> {
     public boolean insertActivity(Aktivitas act, String nim);
     public boolean insertKedisiplinan(Kedisiplinan kedisiplinan, String nim);
     public int getJumlahPeringatanByJenis(String jenis, String nim);
+    public boolean insertAkademik(Akademik aca, String nim);
+    public List<Akademik> getAkademik(String nim);
+    public String getNamaByNim(String nim);
+    public String getFacultyByNim(String nim);
+    public Akademik getKumulatif(String nim);
+    public Aktivitas getPercentage(String nim);
+    public String getIzinInap(String nim);
+    public String getIzinKeluar(String nim);
+    public Kedisiplinan getLatest(String nim);
+    public String getCountSurat(String nim);
+    public String getCountPeringatan(String nim);
 }

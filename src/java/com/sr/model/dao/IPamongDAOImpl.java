@@ -5,6 +5,7 @@
  */
 package com.sr.model.dao;
 
+import com.sr.model.Akademik;
 import com.sr.model.Aktivitas;
 import com.sr.model.Inap;
 import com.sr.model.Kamar;
@@ -16,11 +17,13 @@ import com.sr.model.Penyakit;
 import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import oracle.jdbc.pool.OracleDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -48,6 +51,27 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
     private final String INSERT_ACTIVITY = "INSERT INTO AKTIFITAS_MHS(BANGUN_PAGI, OPERA_PAGI, MANDI, DOA_PAGI, STUDY, DOA_MALAM, TIDUR_MALAM, TANGGAL_AKTIFITAS, NIM) VALUES(?,?,?,?,?,?,?,?,?)";
     private final String INSERT_KEDISIPLINAN = "INSERT INTO PERINGATAN(JENIS_PERINGATAN, KETERANGAN, TANGGAL_PERINGATAN, NIM) VALUES(?,?,?,?)";
     private final String GET_JUMLAH_PERINGATAN = "SELECT COUNT(NIM) FROM PERINGATAN WHERE JENIS_PERINGATAN = ? AND NIM = ?";
+    private final String INSERT_AKADEMIK = "INSERT INTO AKADEMIK_MHS(NIM, SEMESTER, BANYAK_SKS_DIAMBIL, IPS) VALUES (?,?,?,?)";
+    private final String GET_AKADEMIK = "SELECT SEMESTER, BANYAK_SKS_DIAMBIL, IPS FROM AKADEMIK_MHS WHERE NIM = ? ORDER BY SEMESTER ASC";
+    private final String GET_NAMA_BY_NIM = "SELECT NAMA_MHS FROM MAHASISWA WHERE NIM = ?";
+    private final String GET_FACULTY_BY_NIM = "SELECT FAKULTAS FROM AKADEMIK WHERE NIM = ?";
+    private final String GET_KUMULATIF = "SELECT SUM(BANYAK_SKS_DIAMBIL) AS SKS, SUM(IPS*BANYAK_SKS_DIAMBIL)/SUM(BANYAK_SKS_DIAMBIL) AS IPK FROM AKADEMIK_MHS WHERE NIM = ?";
+    private final String GET_PERCENTAGE = "select (((count(bangun_pagi))/count(nim))*100) \"bangun pagi\",\n"
+            + "(((count(opera_pagi))/count(nim))*100) \"opera pagi\",\n"
+            + "(((count(mandi))/count(nim))*100) \"mandi\",\n"
+            + "(((count(doa_pagi))/count(nim))*100) \"doa pagi\",\n"
+            + "(((count(study))/count(nim))*100) \"study\",\n"
+            + "(((count(doa_malam))/count(nim))*100) \"doa malam\",\n"
+            + "(((count(tidur_malam))/count(nim))*100) \"tidur malam\"\n"
+            + "from aktifitas_mhs where nim = ?";
+    private final String GET_IZIN_INAP = "select (count(nim)) \"Banyak Izin Inap\" from Izin_inap  where  nim = ?";
+    private final String GET_IZIN_KELUAR = "select (count(nim)) \"Banyak Izin Inap\" from Izin_keluar  where  nim = ?";
+    private final String GET_LATEST = "SELECT JENIS_PERINGATAN, KETERANGAN FROM peringatan where no_peringatan=\n"
+            + "(select max(no_peringatan)\"No Peringatan\" from peringatan where nim = ?)";
+    private final String GET_COUNT_SURAT = "select count(jenis_peringatan) from peringatan  where nim = ? and jenis_peringatan =\n"
+            + "(select jenis_peringatan from peringatan where no_peringatan= \n"
+            + "(select max(no_peringatan)\"No Peringatan\" from peringatan where nim = ?))";
+    private final String GET_COUNT_PERINGATAN = "SELECT COUNT(JENIS_PERINGATAN) FROM PERINGATAN WHERE NIM = ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -90,7 +114,11 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
 
     @Override
     public String getProdi(String nim) {
-        return (String) getJdbcTemplate().queryForObject(GET_PRODI, new Object[]{nim}, String.class);
+        try {
+            return (String) getJdbcTemplate().queryForObject(GET_PRODI, new Object[]{nim}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
@@ -98,7 +126,7 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
         getJdbcTemplate().update(ADD_PENYAKIT, new Object[]{sakit, tanggal, nim});
         return true;
     }
-    
+
     @Override
     public List<Penyakit> getListPenyakit(String nim) {
         List<Penyakit> penyakit = getJdbcTemplate().query(
@@ -177,7 +205,7 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
 
     @Override
     public boolean insertInap(Inap inap, String nim) {
-        getJdbcTemplate().update(INSERT_INAP, new Object[]{inap.getNama_tujuan(), inap.getAlamat(), inap.getTelp(), 
+        getJdbcTemplate().update(INSERT_INAP, new Object[]{inap.getNama_tujuan(), inap.getAlamat(), inap.getTelp(),
             inap.getKeperluan(), inap.getBerangkat(), inap.getKembali(), inap.getWaktu_berangkat(), inap.getWaktu_kembali(), nim});
         return true;
     }
@@ -185,7 +213,7 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
     @Override
     public boolean insertKeluar(Keluar keluar, String nim) {
         getJdbcTemplate().update(INSERT_KELUAR, new Object[]{keluar.getAlamat(), keluar.getKeperluan(), keluar.getTanggal_keluar(),
-        keluar.getWaktu_keluar(), keluar.getWaktu_kembali(), nim});
+            keluar.getWaktu_keluar(), keluar.getWaktu_kembali(), nim});
         return true;
     }
 
@@ -204,6 +232,108 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
     @Override
     public int getJumlahPeringatanByJenis(String jenis, String nim) {
         return (int) getJdbcTemplate().queryForObject(GET_JUMLAH_PERINGATAN, new Object[]{jenis, nim}, Integer.class);
+    }
+
+    @Override
+    public boolean insertAkademik(Akademik aca, String nim) {
+        getJdbcTemplate().update(INSERT_AKADEMIK, new Object[]{nim, aca.getSemester(), aca.getBanyak_sks(), aca.getIps()},
+                new int[]{Types.VARCHAR, Types.VARCHAR, Types.DECIMAL, Types.DECIMAL});
+        return true;
+    }
+
+    @Override
+    public List<Akademik> getAkademik(String nim) {
+        List<Akademik> aka = getJdbcTemplate().query(GET_AKADEMIK, new Object[]{nim}, new AkademikRowMapper());
+        return aka;
+    }
+
+    @Override
+    public String getNamaByNim(String nim) {
+        try {
+            return (String) getJdbcTemplate().queryForObject(GET_NAMA_BY_NIM, new Object[]{nim}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getFacultyByNim(String nim) {
+        try {
+            return (String) getJdbcTemplate().queryForObject(GET_FACULTY_BY_NIM, new Object[]{nim}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Akademik getKumulatif(String nim) {
+        return (Akademik) getJdbcTemplate().queryForObject(GET_KUMULATIF, new Object[]{nim}, new KumulatifRowMapper());
+    }
+
+    @Override
+    public Aktivitas getPercentage(String nim) {
+        return (Aktivitas) getJdbcTemplate().queryForObject(GET_PERCENTAGE, new Object[]{nim}, new AktivitasRowMapper());
+    }
+
+    @Override
+    public String getIzinInap(String nim) {
+        return (String) getJdbcTemplate().queryForObject(GET_IZIN_INAP, new Object[]{nim}, String.class);
+    }
+
+    @Override
+    public String getIzinKeluar(String nim) {
+        return (String) getJdbcTemplate().queryForObject(GET_IZIN_KELUAR, new Object[]{nim}, String.class);
+    }
+
+    @Override
+    public Kedisiplinan getLatest(String nim) {
+        return (Kedisiplinan) getJdbcTemplate().queryForObject(GET_LATEST, new Object[]{nim}, new KedisiplinanRowMapper());
+    }
+
+    @Override
+    public String getCountSurat(String nim) {
+        return (String) getJdbcTemplate().queryForObject(GET_COUNT_SURAT, new Object[]{nim, nim}, String.class);
+    }
+
+    @Override
+    public String getCountPeringatan(String nim) {
+        return (String) getJdbcTemplate().queryForObject(GET_COUNT_PERINGATAN, new Object[]{nim}, String.class);
+    }
+
+    public class KedisiplinanRowMapper implements RowMapper {
+
+        @Override
+        public Object mapRow(ResultSet rs, int i) throws SQLException {
+            Kedisiplinan kedisiplinan = new Kedisiplinan();
+            kedisiplinan.setJenis(rs.getString("JENIS_PERINGATAN"));
+            return kedisiplinan;
+        }
+
+    }
+
+    public class KumulatifRowMapper implements RowMapper {
+
+        @Override
+        public Object mapRow(ResultSet rs, int i) throws SQLException {
+            Akademik akademik = new Akademik();
+            akademik.setBanyak_sks(rs.getInt("SKS"));
+            akademik.setIpk(rs.getDouble("IPK"));
+            return akademik;
+        }
+
+    }
+
+    public class AkademikRowMapper implements RowMapper {
+
+        @Override
+        public Object mapRow(ResultSet rs, int i) throws SQLException {
+            Akademik akademik = new Akademik();
+            akademik.setSemester(rs.getString(1));
+            akademik.setBanyak_sks(rs.getInt(2));
+            akademik.setIps(rs.getDouble(3));
+            return akademik;
+        }
+
     }
 
     public class PenyakitRowMapper implements RowMapper {
@@ -226,6 +356,22 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
             pamong.setUsername(rs.getString("ID_PAMONG"));
             pamong.setPassword(rs.getString("PASSWORD"));
             return pamong;
+        }
+    }
+
+    public class AktivitasRowMapper implements RowMapper {
+
+        @Override
+        public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Aktivitas aktivitas = new Aktivitas();
+            aktivitas.setBangun_pagi(rs.getString("BANGUN PAGI"));
+            aktivitas.setOpera_pagi(rs.getString("OPERA PAGI"));
+            aktivitas.setDoa_pagi(rs.getString("DOA PAGI"));
+            aktivitas.setStudi(rs.getString("STUDY"));
+            aktivitas.setGebyur_wc(rs.getString("MANDI"));
+            aktivitas.setDoa_malam(rs.getString("DOA MALAM"));
+            aktivitas.setTidur_malam(rs.getString("TIDUR MALAM"));
+            return aktivitas;
         }
     }
 
