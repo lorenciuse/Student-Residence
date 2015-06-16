@@ -163,18 +163,20 @@
             </c:if>
             $("#status").append(statush(<c:out value="${kumulatif.getIpk()}"></c:out>));
             function statush(ipk){
-                if(ipk >= 3.5 && ipk <= 4.0){
+                if(ipk >= 3.4 && ipk <= 4.0){
                     return "Istimewa";
-                }else if(ipk >= 2.99 && ipk <= 3.4){
+                }else if(ipk >= 3 && ipk <= 3.39){
                     return "Sangat Memuaskan";
-                }else if(ipk >= 2.5 && ipk <= 2.98){
+                }else if(ipk >= 2.4 && ipk <= 2.99){
                     return "Cukup Memuaskan";
-                }else if(ipk >= 2.0 && ipk <= 2.4){
+                }else if(ipk >= 2.0 && ipk <= 2.39){
                     return "Kurang Memuaskan";
                 }else if(ipk >= 0 && ipk <= 1.99){
                     return "Tidak Memuaskan";
                 }
             }
+            
+            <c:if test="${akademik!=null}">
             var i = [
                     <c:forEach items="${akademik}" var="akademik">
                             "Semester ${akademik.getSemester()}",
@@ -201,6 +203,7 @@
                 ]
             };
             new Chart(ctx).Line(data);
+            </c:if>
         });
     </script>
 </html>
