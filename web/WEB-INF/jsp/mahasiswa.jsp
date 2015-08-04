@@ -4,8 +4,6 @@
     Author     : Lorencius
 --%>
 
-<%@page import="org.springframework.ui.ModelMap"%>
-<%@page import="org.springframework.beans.factory.annotation.Autowired"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="session_checker.jspf" %>
@@ -23,52 +21,126 @@
         <link href="${pageContext.request.contextPath}/resources/plugins/css/dataTables.responsive.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-duallistbox.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resources/plugins/css/bootstrap-select.min.css" rel="stylesheet">
+        <style>
+            select {
+                visibility: hidden;
+            }
+            select[multiple] {
+                visibility: visible;
+            }
+        </style>
     </head>
-    <body class="skin-blue fixed" style="background-color: #d2d6de;">
+    <body style="background-color: #d2d6de;">
         <%@include file="menubar.jsp"%>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="nav-tabs-custom" role="tabpanel" data-example-id="togglable-tabs" style="margin-top: 1em;">
-                        <ul class="nav nav-tabs" role="tablist" id='myTabs'>
-                            <li class="active">
-                                <a href="#pendaftaran" id="pendaftaran-tab" role="tab" data-toggle="tab" aria-controls="pendaftaran" aria-expanded="true">Pendaftaran</a>
-                            </li>
-                            <li>
-                                <a href="#kamar" id="kamar-tab" role="tab" data-toggle="tab" aria-controls="kamar">Kamar</a>
-                            </li>
-                            <li>
-                                <a href="#biodata" id="biodata-tab" role="tab" data-toggle="tab" aria-controls="biodata">Biodata</a>
-                            </li>
-                            <li>
-                                <a href="#aktivitas" id="aktivitas-tab" role="tab" data-toggle="tab" aria-controls="aktivitas">Aktivitas</a>
-                            </li>
-                            <li>
-                                <a href="#kedisiplinan" role="tab" id="kedisiplinan-tab" data-toggle="tab" aria-controls="kedisiplinan">Kedisiplinan</a>
-                            </li>
-                            <li>
-                                <a href="#kesehatan" id="kesehatan-tab" role="tab" data-toggle="tab" aria-controls="kesehatan">Kesehatan</a>
-                            </li>
-                            <li>
-                                <a href="#perizinan" role="tab" id="perizinan-tab" data-toggle="tab" aria-controls="perizinan">Perizinan</a>
-                            </li>
-                        </ul>
-                        <div id="myTabContent" class="tab-content">
-                            <div role="tabpanel" class="tab-pane fade in active" id="pendaftaran" aria-labelledBy="pendaftaran-tab">
-                                <div class="box box-info">
-                                    <div class="box-header">
-                                        <h3 class="box-title"><b>Pendaftaran Mahasiswa Baru</b></h3>
+                <div class="col-sm-12 col-md-4">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <h3 class="box-title"><span class="glyphicon glyphicon-file"></span> Data Mahasiswa</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-5 col-md-5">
+                                    <form id="form-kamar" method="post" action="mcarimhs">
+                                        <label class="control-label">Nomor Kamar</label>
+                                        <%--cowok: 1-4, 13-16 cewek: 5-12--%>
+                                        <select id="dkamar" name="kamar" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
+                                            <optgroup label="Laki-laki">
+                                                <c:forEach items="${listCowok}" var="cowok">
+                                                    <option><c:out value="${cowok.getNomor()}"></c:out></option>
+                                                </c:forEach>
+                                            </optgroup>
+                                            <optgroup label="Perempuan">
+                                                <c:forEach items="${listCewek}" var="cewek">
+                                                    <option><c:out value="${cewek.getNomor()}"></c:out></option>
+                                                </c:forEach>
+                                            </optgroup>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="col-sm-7 col-md-7">
+                                    <form id="form-mhs" method="post" action="mlihatmhs">
+                                        <input type="hidden" name="kam" id="kam" value="${mkamar}">
+                                        <label class="control-label">Nama Mahasiswa</label>
+                                        <%--cowok: 1-4, 13-16 cewek: 5-12--%>
+                                        <select id="mhs" name="mhs" class="selectpicker show-menu-arrow" data-width="100%" data-size="5">
+                                            <c:forEach items="${mnama}" var="nama">
+                                                <option><c:out value="${nama}"></c:out></option>
+                                            </c:forEach>
+                                        </select>
+                                    </form>
+                                </div>
+                                <input type="hidden" name="maha" id="maha" value="${mmaha}">
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <th>Nama</th>
+                                                <td><c:out value="${mmaha}"></c:out></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>NIM</th>
+                                                    <td><c:out value="${mnim}"></c:out></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Prodi</th>
+                                                    <td><c:out value="${mprodi}"></c:out></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Fakultas</th>
+                                                    <td><c:out value="${mfakultas}"></c:out></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="box-body">
-                                        <div class="col-sm-6 col-md-6">
-                                            <h6 class="page-header">Tambah Nomor Pendaftaran</h6>
-                                            <form class="form-horizontal" role="form" action="pendaftar" method="post">
-                                                <input type="hidden" name="idPamong" value="${idPamong}">
-                                                <div class="col-sm-6 col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-8">
+                        <div class="nav-tabs-custom" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul class="nav nav-tabs" role="tablist" id='myTabs'>
+                                <li class="active">
+                                    <a href="#pendaftaran" id="pendaftaran-tab" role="tab" data-toggle="tab" aria-controls="pendaftaran" aria-expanded="true">Pendaftaran</a>
+                                </li>
+                                <li>
+                                    <a href="#kamar" id="kamar-tab" role="tab" data-toggle="tab" aria-controls="kamar">Kamar</a>
+                                </li>
+                                <li>
+                                    <a href="#biodata" id="biodata-tab" role="tab" data-toggle="tab" aria-controls="biodata">Biodata</a>
+                                </li>
+                                <li>
+                                    <a href="#aktivitas" id="aktivitas-tab" role="tab" data-toggle="tab" aria-controls="aktivitas">Aktivitas</a>
+                                </li>
+                                <li>
+                                    <a href="#kedisiplinan" role="tab" id="kedisiplinan-tab" data-toggle="tab" aria-controls="kedisiplinan">Kedisiplinan</a>
+                                </li>
+                                <li>
+                                    <a href="#kesehatan" id="kesehatan-tab" role="tab" data-toggle="tab" aria-controls="kesehatan">Kesehatan</a>
+                                </li>
+                                <li>
+                                    <a href="#perizinan" role="tab" id="perizinan-tab" data-toggle="tab" aria-controls="perizinan">Perizinan</a>
+                                </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="pendaftaran" aria-labelledBy="pendaftaran-tab">
+                                    <div class="box box-info">
+                                        <div class="box-header">
+                                            <h3 class="box-title"><b>Pendaftaran Mahasiswa Baru</b></h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <div class="col-sm-12 col-md-4">
+                                                <h6 class="page-header">Tambah Nomor</h6>
+                                                <form class="form-horizontal" role="form" action="pendaftar" method="post">
+                                                    <input type="hidden" name="idPamong" value="${idPamong}">
+                                                <div class="col-sm-12 col-md-12">
                                                     <label class="control-label">Nomor Pendaftaran</label>
                                                     <input type="text" class="form-control" name="nomor_pendaftaran" required>
                                                 </div>
-                                                <div class="col-sm-6 col-md-6">
+                                                <div class="col-sm-12 col-md-12">
                                                     <label class="control-label">NIM</label>
                                                     <input type="text" class="form-control" name="nim" required>
                                                 </div>
@@ -77,7 +149,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="col-sm-6 col-md-6">
+                                        <div class="col-sm-8 col-md-8">
                                             <h6 class="page-header">Daftar Nomor Pendaftaran</h6>
                                             <table id="myTable" class="table table-striped display" cellspacing="0" width="100%">
                                                 <thead>
@@ -117,8 +189,8 @@
                                                     <div class="col-sm-9 col-md-9">
                                                         <label class="control-label">Daftar Nama Mahasiswa</label>
                                                         <select multiple="multiple" size="10" name="nama[]">
-                                                            <c:forEach items="${listNama}" var="nama">
-                                                                <option value="${nama}">${nama}</option>    
+                                                            <c:forEach items="${listNama}" var="namak">
+                                                                <option value="${namak}">${namak}</option>    
                                                             </c:forEach>
                                                         </select>
                                                     </div>
@@ -170,47 +242,48 @@
                                         <h3 class="box-title"><b>Daftar Rekap Aktivitas Mahasiswa</b></h3>
                                     </div>
                                     <div class="box-body">
-                                        <div class="col-sm-7 col-md-7">
+                                        <div class="col-sm-5 col-md-5">
+                                            <h6 class="page-header">Predikat Aktivitas</h6>
                                             <div class="row">
-                                                <div class="col-sm-5 col-md-5">
-                                                    <form class="form-horizontal form-group"role="form" action="aktivitasrep" method="post">
-                                                        <label class="control-label">NIM Mahasiswa</label>
-                                                        <div class="input-group">
-                                                            <input type="text" name="nim" class="form-control" value="${nimarep}" required>
-                                                            <span class="input-group-btn">
-                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                            </span>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="col-sm-5 col-md-offset-1 col-md-5">
-                                                    <i>Keterangan :<br> A = Amat Baik, B = Baik,<br> C = Cukup, D = Kurang, E = Buruk</i>
+                                                <!--                                                <div class="col-sm-5 col-md-5">
+                                                                                                    <form class="form-horizontal form-group"role="form" action="aktivitasrep" method="post">
+                                                                                                        <label class="control-label">NIM Mahasiswa</label>
+                                                                                                        <div class="input-group">
+                                                                                                            <input type="text" name="nim" class="form-control" value="${nimarep}" required>
+                                                                                                            <span class="input-group-btn">
+                                                                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </form>
+                                                                                                </div>-->
+                                                <div class="col-sm-12 col-md-12">
+                                                    <i>Keterangan :<br> A = Amat Baik, B = Baik, C = Cukup, D = Kurang,<br> E = Buruk</i>
                                                 </div>
                                             </div>
                                             <div class="row">
+                                                <!--                                                <div class="col-sm-5 col-md-5">
+                                                                                                    <table class="panel-body table table-striped">
+                                                                                                        <tbody>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Nama</strong></td>
+                                                                                                                <td>${arepnama}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>NIM</strong></td>
+                                                                                                                <td>${nimarep}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Prodi</strong></td>
+                                                                                                                <td>${arepprodi}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Fakultas</strong></td>
+                                                                                                                <td>${arepfakultas}</td>
+                                                                                                            </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </div>-->
                                                 <div class="col-sm-5 col-md-5">
-                                                    <table class="panel-body table table-striped">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td><strong>Nama</strong></td>
-                                                                <td>${arepnama}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>NIM</strong></td>
-                                                                <td>${nimarep}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Prodi</strong></td>
-                                                                <td>${arepprodi}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Fakultas</strong></td>
-                                                                <td>${arepfakultas}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="col-sm-5 col-md-offset-1 col-md-5">
                                                     <table class="panel-body table table-striped">
                                                         <tbody>
                                                             <tr>
@@ -246,7 +319,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-5 col-md-5">
+                                        <div class="col-sm-7 col-md-7">
+                                            <h6 class="page-header">Grafik Aktivitas</h6>
                                             <canvas id="actChart"></canvas>
                                         </div>
                                     </div>
@@ -254,22 +328,22 @@
                             </div>
                             <div role="tabpanel" class="tab-pane fade in" id="biodata" aria-labelledBy="biodata-tab">
                                 <div class="box box-info">
-                                    <div class="box-header">
-                                        <div class="col-md-3">
-                                            <h3 class="box-title"><b>Biodata Mahasiswa</b></h3>
-                                            <form class="form-horizontal"role="form" action="biodata" method="post">
-                                                <label class="control-label">NIM Mahasiswa</label>
-                                                <div class="input-group">
-                                                    <input type="text" name="nim" class="form-control" value="${nim}" required>
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                    </span>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <!--                                    <div class="box-header">
+                                                                            <div class="col-md-3">
+                                                                                <h3 class="box-title"><b>Biodata Mahasiswa</b></h3>
+                                                                                <form class="form-horizontal"role="form" action="biodata" method="post">
+                                                                                    <label class="control-label">NIM Mahasiswa</label>
+                                                                                    <div class="input-group">
+                                                                                        <input type="text" name="nim" class="form-control" value="${nim}" required>
+                                                                                        <span class="input-group-btn">
+                                                                                            <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>-->
                                     <div class="box-body">
-                                        <div class="col-md-offset-2 col-md-8">
+                                        <div class="col-md-12">
                                             <div id="formBiodata" class="form-horizontal">
                                                 <div class="row">
                                                     <h4 class="page-header"><strong>DATA DIRI DAN ORANGTUA</strong></h4>
@@ -278,7 +352,7 @@
                                                             <div class="col-sm-1 col-md-1">
                                                                 <c:choose>
                                                                     <c:when test="${foto}">
-                                                                        <img class="thumbnail" src="lihatfoto?nim=${nim}" alt="${nim}" style="width: 100px; height: auto">
+                                                                        <img class="thumbnail" src="lihatfoto?nim=${mnim}" alt="${mnim}" style="width: 100px; height: auto">
                                                                     </c:when>
                                                                     <c:otherwise>
                                                                         <img class="thumbnail text-center" alt="FOTO" style="width: 100px; height: auto">
@@ -453,10 +527,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">      
-                                                    <div class="form-group">
-                                                        <div class="pull-right">
+                                                    <div class="col-md-1">
+                                                        <div class="form-group">
                                                             <form action="biodata-print" target="_blank" method="post">
-                                                                <input type="hidden" name="nim" value="${nim}">
+                                                                <input type="hidden" name="nim" value="${mnim}">
                                                                 <button class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Print</button>
                                                             </form>
                                                         </div>
@@ -474,47 +548,56 @@
                                     </div>
                                     <div class="box-body">
                                         <div class="col-sm-12 col-md-12">
+                                            <!--                                            <div class="row">
+                                                                                            <div class="col-sm-3 col-md-3">
+                                                                                                <form class="form-horizontal form-group"role="form" action="kedisiplinanrep" method="post">
+                                                                                                    <label class="control-label">NIM Mahasiswa</label>
+                                                                                                    <div class="input-group">
+                                                                                                        <input type="text" name="nim" class="form-control" value="${nimkrep}"required>
+                                                                                                        <span class="input-group-btn">
+                                                                                                            <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>-->
                                             <div class="row">
-                                                <div class="col-sm-3 col-md-3">
-                                                    <form class="form-horizontal form-group"role="form" action="kedisiplinanrep" method="post">
-                                                        <label class="control-label">NIM Mahasiswa</label>
-                                                        <div class="input-group">
-                                                            <input type="text" name="nim" class="form-control" value="${nimkrep}"required>
-                                                            <span class="input-group-btn">
-                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                            </span>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-3 col-md-3">
-                                                    <table class="panel-body table table-striped">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td><strong>Nama</strong></td>
-                                                                <td>${krepnama}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>NIM</strong></td>
-                                                                <td>${nimkrep}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Prodi</strong></td>
-                                                                <td>${krepprodi}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Fakultas</strong></td>
-                                                                <td>${krepfakultas}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="col-sm-3 col-md-3 text-center">
-                                                    <h3 class="box-title">Peringatan Terakhir</h3>
-                                                    <label class="page-header">${krepdis.getJenis()} ${krepcount}</label>
-                                                </div>  
+                                                <!--                                                <div class="col-sm-3 col-md-3">
+                                                                                                    <table class="panel-body table table-striped">
+                                                                                                        <tbody>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Nama</strong></td>
+                                                                                                                <td>${krepnama}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>NIM</strong></td>
+                                                                                                                <td>${nimkrep}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Prodi</strong></td>
+                                                                                                                <td>${krepprodi}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Fakultas</strong></td>
+                                                                                                                <td>${krepfakultas}</td>
+                                                                                                            </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </div>-->
                                                 <div class="col-sm-5 col-md-5">
+                                                    <h6 class="page-header">Peringatan Terakhir</h6>
+                                                    <c:choose>
+                                                        <c:when test="${krepcount!='0'}">
+                                                        <label class="page-header">Peringatan : ${krepdis.getJenis()} ${krepcount}</label>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <label class="page-header">Peringatan : ${krepdis.getJenis()}</label>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    
+                                                </div>  
+                                                <div class="col-sm-7 col-md-7">
+                                                    <h6 class="page-header">Grafik Peringatan</h6>
                                                     <canvas id="disiplinChart"></canvas>
                                                 </div>
                                             </div>
@@ -524,20 +607,20 @@
                             </div>
                             <div role="tabpanel" class="tab-pane fade in" id="kesehatan" aria-labelledBy="kesehatan-tab">
                                 <div class="box box-info">
-                                    <div class="box-header">
-                                        <div class="col-md-3">
-                                            <h3 class="box-title"><b>Daftar Rekap Kesehatan Mahasiswa</b></h3>
-                                            <form class="form-horizontal"role="form" action="riwayat" method="post">
-                                                <label class="control-label">NIM Mahasiswa</label>
-                                                <div class="input-group">
-                                                    <input type="text" name="nim" class="form-control" value="${nim}">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                    </span>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <!--                                    <div class="box-header">
+                                                                            <div class="col-md-3">
+                                                                                <h3 class="box-title"><b>Daftar Rekap Kesehatan Mahasiswa</b></h3>
+                                                                                <form class="form-horizontal"role="form" action="riwayat" method="post">
+                                                                                    <label class="control-label">NIM Mahasiswa</label>
+                                                                                    <div class="input-group">
+                                                                                        <input type="text" name="nim" class="form-control" value="${nim}">
+                                                                                        <span class="input-group-btn">
+                                                                                            <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>-->
                                     <div class="box-body">
                                         <div class="col-md-offset-2 col-md-8">
                                             <h6 class="page-header text-center">Daftar Riwayat Sakit</h6>
@@ -552,43 +635,44 @@
                                     </div>
                                     <div class="box-body">
                                         <div class="col-sm-12 col-md-12">
+                                            <!--                                            <div class="row">
+                                                                                            <div class="col-md-3">
+                                                                                                <form class="form-horizontal"role="form" action="perizinanrep" method="post">
+                                                                                                    <label class="control-label">NIM Mahasiswa</label>
+                                                                                                    <div class="input-group">
+                                                                                                        <input type="text" name="nim" class="form-control" value="${nimprep}" required>
+                                                                                                        <span class="input-group-btn">
+                                                                                                            <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>-->
                                             <div class="row">
-                                                <div class="col-sm-6 col-md-6">
-                                                    <form class="form-horizontal"role="form" action="perizinanrep" method="post">
-                                                        <label class="control-label">NIM Mahasiswa</label>
-                                                        <div class="input-group">
-                                                            <input type="text" name="nim" class="form-control" value="${nimprep}" required>
-                                                            <span class="input-group-btn">
-                                                                <button class="btn btn-primary btn-flat" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                                            </span>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6 col-md-6">
-                                                    <table class="panel-body table table-striped">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td><strong>Nama</strong></td>
-                                                                <td>${prepnama}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>NIM</strong></td>
-                                                                <td>${nimprep}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Prodi</strong></td>
-                                                                <td>${prepprodi}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Fakultas</strong></td>
-                                                                <td>${prepfakultas}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="col-sm-3 col-md-3">
+                                                <!--                                                <div class="col-sm-3 col-md-3">
+                                                                                                    <table class="panel-body table table-striped">
+                                                                                                        <tbody>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Nama</strong></td>
+                                                                                                                <td>${prepnama}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>NIM</strong></td>
+                                                                                                                <td>${nimprep}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Prodi</strong></td>
+                                                                                                                <td>${prepprodi}</td>
+                                                                                                            </tr>
+                                                                                                            <tr>
+                                                                                                                <td><strong>Fakultas</strong></td>
+                                                                                                                <td>${prepfakultas}</td>
+                                                                                                            </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </div>-->
+                                                <div class="col-sm-5 col-md-5">
+                                                    <h6 class="page-header">Total Jumlah Izin</h6>
                                                     <table class="panel-body table table-striped">
                                                         <tbody>
                                                             <tr>
@@ -602,7 +686,8 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <div class="col-sm-3 col-md-3">
+                                                <div class="col-sm-7 col-md-7">
+                                                    <h6 class="page-header">Grafik Perizinan</h6>
                                                     <canvas id="pChart"></canvas>
                                                 </div>
                                             </div>
@@ -626,7 +711,46 @@
         <script src="${pageContext.request.contextPath}/resources/plugins/js/bootstrap-select.min.js"></script>
         <script src="${pageContext.request.contextPath}/resources/plugins/js/Chart.min.js"></script>
         <script>
+            $(function () {
+                $('#dkamar').on('change', function () {
+                    $('#form-kamar').submit();
+                });
+                $('#mhs').on('change', function () {
+                    $('#form-mhs').submit();
+                });
+            });
             $(document).ready(function () {
+                $('select[name="nama[]"]').bootstrapDualListbox();
+                $('.selectpicker').selectpicker();
+                $('#no').selectpicker('val', "");
+                $('#dkamar').selectpicker('val', "");
+                $('#mhs').selectpicker('val', "");
+                $('#myTable').dataTable({
+                    "pageLength": 5,
+                    "lengthChange": false,
+                    responsive: true
+                });
+                $('#myKamar').dataTable({
+                    "columns": [
+                        {"width": "20%"},
+                        {"width": "80%"}
+                    ],
+                    autoWidth: false,
+                    "pageLength": 10,
+                    "lengthChange": false,
+                    responsive: true
+                });
+                $(document.getElementById('mahasiswa')).addClass("active");
+            <c:choose>
+                <c:when test = "${selectedkm}">
+                $('#dkamar').selectpicker('val', document.getElementById("kam").value);
+                </c:when>
+            </c:choose>
+            <c:choose >
+                <c:when test = "${selectedmm}">
+                $('#mhs').selectpicker('val', document.getElementById("maha").value);
+                </c:when>
+            </c:choose>
                 Chart.defaults.global.responsive = true;
                 var ctx = document.getElementById("actChart").getContext("2d");
                 var ctx2 = document.getElementById("pChart").getContext("2d");
@@ -681,7 +805,6 @@
                     animationEasing: "easeOutBounce"
                 });
             </c:if>
-
             <c:if test="${inap != null}">
                 var data1 = [
                     {
@@ -725,23 +848,18 @@
                         }
                     ]
                 };
-
                 new Chart(ctx3).Line(data2, {
                     animationEasing: "easeOutBounce"
                 });
-                </c:if>
+            </c:if>
                 var poin = [<c:out value="${achart.getBangun_pagi()}"></c:out>,<c:out value="${achart.getOpera_pagi()}"></c:out>,
             <c:out value="${achart.getDoa_pagi()}"></c:out>,<c:out value="${achart.getStudi()}"></c:out>,
             <c:out value="${achart.getGebyur_wc()}"></c:out>,<c:out value="${achart.getDoa_malam()}"></c:out>,
             <c:out value="${achart.getTidur_malam()}"></c:out>];
-
                 var elemen = ["#vbangun", "#vopera", "#vdoapagi", "#vstudi", "#vgebyur", "#vdoamalam", "#vtidur"], i;
-
                 for (i = 0; i < elemen.length; i++) {
                     $(elemen[i]).append((convert(poin[i])));
-                    console.log(convert(poin[i]));
                 }
-
                 function convert(poin) {
                     if (poin > 80) {
                         return "A";
@@ -759,38 +877,17 @@
                         return "E";
                     }
                 }
-
-                $('select[name="nama[]"]').bootstrapDualListbox();
-                $('.selectpicker').selectpicker();
-                $('#no').selectpicker('val', "");
-                $('#myTable').dataTable({
-                    "pageLength": 5,
-                    "lengthChange": false,
-                    responsive: true
-                });
-                $('#myKamar').dataTable({
-                    "columns": [
-                        {"width": "20%"},
-                        {"width": "80%"}
-                    ],
-                    autoWidth: false,
-                    "pageLength": 10,
-                    "lengthChange": false,
-                    responsive: true
-                });
-                $(document.getElementById('mahasiswa')).addClass("active");
             });
-
             // Javascript to enable link to tab
             var hash = document.location.hash;
             var prefix = "tab_";
             if (hash) {
                 $('.nav-tabs a[href=' + hash.replace(prefix, "") + ']').tab('show');
             }
-
             // Change hash for page-reload
             $('.nav-tabs a').on('shown.bs.tab', function (e) {
                 window.location.hash = e.target.hash.replace("#", "#" + prefix);
+                window.dispatchEvent(new Event('resize'));
             });
         </script>
     </body>

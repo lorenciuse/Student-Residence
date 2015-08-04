@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,21 +53,27 @@ public class PamongController {
 
     @RequestMapping("/monev")
     public String home(HttpServletRequest request) {
-        request.getSession().removeAttribute("nama");
-        request.getSession().removeAttribute("maha");
-        request.getSession().removeAttribute("nim");
-        request.getSession().removeAttribute("prodi");
-        request.getSession().removeAttribute("kamar");
+        Enumeration attr = request.getSession().getAttributeNames();
+        while (attr.hasMoreElements()) {
+            String attrs = attr.nextElement().toString();
+            if (!attrs.equals("idPamong")) {
+                request.getSession().removeAttribute(attrs);
+            }
+        }
         return "monev";
     }
 
     @RequestMapping(value = "/akademik", method = {RequestMethod.POST, RequestMethod.GET})
     public String akademik(HttpServletRequest request, ModelMap modelMap) {
-        request.getSession().removeAttribute("nama");
-        request.getSession().removeAttribute("maha");
-        request.getSession().removeAttribute("nim");
-        request.getSession().removeAttribute("prodi");
-        request.getSession().removeAttribute("kamar");
+        Enumeration attr = request.getSession().getAttributeNames();
+        while (attr.hasMoreElements()) {
+            String attrs = attr.nextElement().toString();
+            if (!attrs.equals("idPamong")&&!attrs.equals("akademik")&&!attrs.equals("anama")&&
+                    !attrs.equals("fakultas")&&!attrs.equals("aprodi")&&!attrs.equals("kumulatif")&&
+                    !attrs.equals("aca")) {
+                request.getSession().removeAttribute(attrs);
+            }
+        }
         if (request.getParameter("aca") != null) {
             String nim = request.getParameter("aca");
             List<Akademik> akademik = pmg.getAkademik(nim);
@@ -160,12 +167,17 @@ public class PamongController {
     @RequestMapping("/mahasiswa")
     public String mahasiswa(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
 //        final HttpSession session = request.getSession();
-        request.getSession().removeAttribute("nama");
-        request.getSession().removeAttribute("maha");
-        request.getSession().removeAttribute("nim");
-        request.getSession().removeAttribute("prodi");
-        request.getSession().removeAttribute("kamar");
-        
+        Enumeration attr = request.getSession().getAttributeNames();
+        while (attr.hasMoreElements()) {
+            String attrs = attr.nextElement().toString();
+            if (!attrs.equals("idPamong")&&!attrs.equals("listCowok")&&!attrs.equals("listCewek")&&
+                    !attrs.equals("selectedkm")&&!attrs.equals("selectedmm")&&!attrs.equals("mkamar")&&
+                    !attrs.equals("mnama")&&!attrs.equals("mmaha")&&!attrs.equals("mnim")&&!attrs.equals("mprodi")&&
+                    !attrs.equals("mfakultas")) {
+                request.getSession().removeAttribute(attrs);
+            }
+        }
+
 //        if (request.getSession().getAttribute("idPamong") == null) {
 //            try {
 //                response.sendRedirect("login");
@@ -216,17 +228,29 @@ public class PamongController {
             }
         }
 
-        if (request.getParameter("nim") != null) {
-            Mahasiswa maha = mhs.getBiodataByNim(request.getParameter("nim"));
-            AkademikSR asr = mhs.getAkademikByNim(request.getParameter("nim"));
-            List<Prestasi> kampus = mhs.getPrestasiByNimJenis(request.getParameter("nim"), "Kampus");
-            List<Prestasi> luar = mhs.getPrestasiByNimJenis(request.getParameter("nim"), "Luar Kampus");
-            modelMap.addAttribute("nim", request.getParameter("nim"));
+        if (request.getSession().getAttribute("mnim") != null) {
+            String nim = request.getSession().getAttribute("mnim").toString();
+            Mahasiswa maha = mhs.getBiodataByNim(nim);
+            AkademikSR asr = mhs.getAkademikByNim(nim);
+            List<Prestasi> kampus = mhs.getPrestasiByNimJenis(nim, "Kampus");
+            List<Prestasi> luar = mhs.getPrestasiByNimJenis(nim, "Luar Kampus");
             modelMap.addAttribute("mhs", maha);
             modelMap.addAttribute("asr", asr);
             modelMap.addAttribute("presK", kampus);
             modelMap.addAttribute("presL", luar);
             modelMap.addAttribute("foto", true);
+            Aktivitas achart = pmg.getPercentage(nim);
+            request.getSession().setAttribute("achart", achart);
+            String count = pmg.getCountSurat(nim);
+            String countPeringatan = pmg.getCountPeringatan(nim);
+            request.getSession().setAttribute("krepcount", count);
+            request.getSession().setAttribute("krepcountp", countPeringatan);
+            Kedisiplinan kedisiplinan = pmg.getLatest(nim);
+            request.getSession().setAttribute("krepdis", kedisiplinan);
+            String inap = pmg.getIzinInap(nim);
+            String keluar = pmg.getIzinKeluar(nim);
+            request.getSession().setAttribute("inap", inap);
+            request.getSession().setAttribute("keluar", keluar);
         }
 
         //Menambahkan semua atribut ke dalam modelmap
@@ -277,9 +301,13 @@ public class PamongController {
 
     @RequestMapping("/carimhs")
     public String cari(HttpServletRequest request, ModelMap modelMap) {
-        request.getSession().removeAttribute("nim");
-        request.getSession().removeAttribute("maha");
-        request.getSession().removeAttribute("prodi");
+        Enumeration attr = request.getSession().getAttributeNames();
+        while (attr.hasMoreElements()) {
+            String attrs = attr.nextElement().toString();
+            if (!attrs.equals("idPamong")) {
+                request.getSession().removeAttribute(attrs);
+            }
+        }
         List<Kamar> listNomorCowok = pmg.getListNomorByStatus("Cowok");
         List<Kamar> listNomorCewek = pmg.getListNomorByStatus("Cewek");
         List<String> nama = pmg.getNamaFromKamar(request.getParameter("kamar"), request.getSession().getAttribute("idPamong").toString());
@@ -312,6 +340,36 @@ public class PamongController {
         modelMap.addAttribute("lisan", lisan);
         modelMap.addAttribute("tertulis", tertulis);
         return "monitoring";
+    }
+
+    @RequestMapping("/mcarimhs")
+    public String mcari(HttpServletRequest request, ModelMap modelMap) {
+        Enumeration attr = request.getSession().getAttributeNames();
+        while (attr.hasMoreElements()) {
+            String attrs = attr.nextElement().toString();
+            if (!attrs.equals("idPamong")) {
+                request.getSession().removeAttribute(attrs);
+            }
+        }
+        List<Kamar> listNomorCowok = pmg.getListNomorByStatus("Cowok");
+        List<Kamar> listNomorCewek = pmg.getListNomorByStatus("Cewek");
+        List<String> nama = pmg.getNamaFromKamar(request.getParameter("kamar"), request.getSession().getAttribute("idPamong").toString());
+        request.getSession().setAttribute("listCowok", listNomorCowok);
+        request.getSession().setAttribute("listCewek", listNomorCewek);
+        request.getSession().setAttribute("selectedkm", true);
+        request.getSession().setAttribute("mkamar", request.getParameter("kamar"));
+        request.getSession().setAttribute("mnama", nama);
+        return "redirect:/pamong/mahasiswa";
+    }
+
+    @RequestMapping("/mlihatmhs")
+    public String mlihat(HttpServletRequest request, ModelMap modelMap) {
+        request.getSession().setAttribute("selectedmm", true);
+        request.getSession().setAttribute("mmaha", request.getParameter("mhs"));
+        request.getSession().setAttribute("mnim", mhs.getNimByNama(request.getParameter("mhs")));
+        request.getSession().setAttribute("mprodi", pmg.getProdi(mhs.getNimByNama(request.getParameter("mhs"))));
+        request.getSession().setAttribute("mfakultas", pmg.getFacultyByNim(mhs.getNimByNama(request.getParameter("mhs"))));
+        return "redirect:/pamong/mahasiswa";
     }
 
     @RequestMapping("/tambahpenyakit")
@@ -386,54 +444,54 @@ public class PamongController {
         return "redirect:/pamong/monitoring#tab_kedisiplinan";
     }
 
-    @RequestMapping("/aktivitasrep")
-    public String aktivitasrep(HttpServletRequest request, ModelMap modelMap) {
-        String nim = request.getParameter("nim");
-        String prodi = pmg.getProdi(nim);
-        String nama = pmg.getNamaByNim(nim);
-        String fakultas = pmg.getFacultyByNim(nim);
-        Aktivitas achart = pmg.getPercentage(nim);
-        request.getSession().setAttribute("nimarep", nim);
-        request.getSession().setAttribute("arepprodi", prodi);
-        request.getSession().setAttribute("arepnama", nama);
-        request.getSession().setAttribute("arepfakultas", fakultas);
-        request.getSession().setAttribute("achart", achart);
-        return "redirect:/pamong/mahasiswa#tab_aktivitas";
-    }
+//    @RequestMapping("/aktivitasrep")
+//    public String aktivitasrep(HttpServletRequest request, ModelMap modelMap) {
+//        String nim = request.getParameter("nim");
+//        String prodi = pmg.getProdi(nim);
+//        String nama = pmg.getNamaByNim(nim);
+//        String fakultas = pmg.getFacultyByNim(nim);
+//        Aktivitas achart = pmg.getPercentage(nim);
+//        request.getSession().setAttribute("nimarep", nim);
+//        request.getSession().setAttribute("arepprodi", prodi);
+//        request.getSession().setAttribute("arepnama", nama);
+//        request.getSession().setAttribute("arepfakultas", fakultas);
+//        request.getSession().setAttribute("achart", achart);
+//        return "redirect:/pamong/mahasiswa#tab_aktivitas";
+//    }
 
-    @RequestMapping("/perizinanrep")
-    public String perizinanrep(HttpServletRequest request) {
-        String nim = request.getParameter("nim");
-        String prodi = pmg.getProdi(nim);
-        String nama = pmg.getNamaByNim(nim);
-        String fakultas = pmg.getFacultyByNim(nim);
-        String inap = pmg.getIzinInap(nim);
-        String keluar = pmg.getIzinKeluar(nim);
-        request.getSession().setAttribute("nimprep", nim);
-        request.getSession().setAttribute("prepprodi", prodi);
-        request.getSession().setAttribute("prepnama", nama);
-        request.getSession().setAttribute("prepfakultas", fakultas);
-        request.getSession().setAttribute("inap", inap);
-        request.getSession().setAttribute("keluar", keluar);
-        return "redirect:/pamong/mahasiswa#tab_perizinan";
-    }
+//    @RequestMapping("/perizinanrep")
+//    public String perizinanrep(HttpServletRequest request) {
+//        String nim = request.getParameter("nim");
+//        String prodi = pmg.getProdi(nim);
+//        String nama = pmg.getNamaByNim(nim);
+//        String fakultas = pmg.getFacultyByNim(nim);
+//        String inap = pmg.getIzinInap(nim);
+//        String keluar = pmg.getIzinKeluar(nim);
+//        request.getSession().setAttribute("nimprep", nim);
+//        request.getSession().setAttribute("prepprodi", prodi);
+//        request.getSession().setAttribute("prepnama", nama);
+//        request.getSession().setAttribute("prepfakultas", fakultas);
+//        request.getSession().setAttribute("inap", inap);
+//        request.getSession().setAttribute("keluar", keluar);
+//        return "redirect:/pamong/mahasiswa#tab_perizinan";
+//    }
 
-    @RequestMapping("/kedisiplinanrep")
-    public String kedisiplinanrep(HttpServletRequest request, ModelMap modelMap) {
-        String nim = request.getParameter("nim");
-        String prodi = pmg.getProdi(nim);
-        String nama = pmg.getNamaByNim(nim);
-        String fakultas = pmg.getFacultyByNim(nim);
-        String count = pmg.getCountSurat(nim);
-        String countPeringatan = pmg.getCountPeringatan(nim);
-        request.getSession().setAttribute("nimkrep", nim);
-        request.getSession().setAttribute("krepprodi", prodi);
-        request.getSession().setAttribute("krepnama", nama);
-        request.getSession().setAttribute("krepfakultas", fakultas);
-        request.getSession().setAttribute("krepcount", count);
-        request.getSession().setAttribute("krepcountp", countPeringatan);
-        Kedisiplinan kedisiplinan = pmg.getLatest(request.getParameter("nim"));
-        request.getSession().setAttribute("krepdis", kedisiplinan);
-        return "redirect:/pamong/mahasiswa#tab_kedisiplinan";
-    }
+//    @RequestMapping("/kedisiplinanrep")
+//    public String kedisiplinanrep(HttpServletRequest request, ModelMap modelMap) {
+//        String nim = request.getParameter("nim");
+//        String prodi = pmg.getProdi(nim);
+//        String nama = pmg.getNamaByNim(nim);
+//        String fakultas = pmg.getFacultyByNim(nim);
+//        String count = pmg.getCountSurat(nim);
+//        String countPeringatan = pmg.getCountPeringatan(nim);
+//        request.getSession().setAttribute("nimkrep", nim);
+//        request.getSession().setAttribute("krepprodi", prodi);
+//        request.getSession().setAttribute("krepnama", nama);
+//        request.getSession().setAttribute("krepfakultas", fakultas);
+//        request.getSession().setAttribute("krepcount", count);
+//        request.getSession().setAttribute("krepcountp", countPeringatan);
+//        Kedisiplinan kedisiplinan = pmg.getLatest(request.getParameter("nim"));
+//        request.getSession().setAttribute("krepdis", kedisiplinan);
+//        return "redirect:/pamong/mahasiswa#tab_kedisiplinan";
+//    }
 }

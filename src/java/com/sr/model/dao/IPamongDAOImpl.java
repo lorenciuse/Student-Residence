@@ -287,7 +287,14 @@ public class IPamongDAOImpl implements IPamongDAO<Pamong> {
 
     @Override
     public Kedisiplinan getLatest(String nim) {
-        return (Kedisiplinan) getJdbcTemplate().queryForObject(GET_LATEST, new Object[]{nim}, new KedisiplinanRowMapper());
+        
+        try{
+        return (Kedisiplinan) getJdbcTemplate().queryForObject(GET_LATEST, new Object[]{nim}, new KedisiplinanRowMapper());}
+        catch(EmptyResultDataAccessException e){
+            Kedisiplinan k = new Kedisiplinan();
+            k.setJenis("Belum mendapatkan peringatan");
+            return k;
+        }
     }
 
     @Override
